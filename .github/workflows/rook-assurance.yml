@@ -16,7 +16,6 @@ jobs:
     environment: rook-assurance
     env:
       ROOK_ENV: prod
-      ROOK_HOME: ${{ runner.temp }}/rook-home
       ROOK_PROJECT_ID: ${{ vars.ROOK_PROJECT_ID }}
       ROOK_AGENT_ID: ${{ vars.ROOK_AGENT_ID }}
       ROOK_PROFILE: ${{ vars.ROOK_PROFILE }}
@@ -43,6 +42,9 @@ jobs:
             -o "$RUNNER_TEMP/install-rook.sh"
           bash "$RUNNER_TEMP/install-rook.sh" --version 0.1.5 --dir "$RUNNER_TEMP/rook-bin"
           echo "$RUNNER_TEMP/rook-bin" >> "$GITHUB_PATH"
+          # Rook's home (credentials, env store) stays outside the checkout. The runner
+          # context is not available in job-level env, so it is set here.
+          echo "ROOK_HOME=$RUNNER_TEMP/rook-home" >> "$GITHUB_ENV"
           command -v jq
       - name: Run the reviewed suite
         shell: bash
