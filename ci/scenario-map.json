@@ -1,0 +1,97 @@
+{
+  "_about": [
+    "Fills the gaps in Rook's own feature -> source mapping for ci/select-scenarios.mjs.",
+    "Rook's features/*.yaml list `sources` (file or file:symbol) and scenarios list `feature_id`;",
+    "the selector reads those first. Anything a change touches that neither Rook nor this file",
+    "maps runs the WHOLE gate list, so a missing entry costs credits, never coverage.",
+    "Symbols: a top-level def/class/assignment in .py; a top-level function/const in .mjs, or",
+    "CONST.key for a key of a top-level object (e.g. OPERATIONS.lookup_service)."
+  ],
+
+  "ignore": {
+    "_why": "Changes here never reach what the gate tests (execute turns through the profile).",
+    "paths": [
+      "docs/rook-ci-blueprint.md",
+      "agent-arch.html",
+      ".gitignore",
+      "test_incident_scribe.py",
+      "scripts/preflight.sh",
+      "scripts/preflight.ps1",
+      ".testmuai/rook/settings.json",
+      ".testmuai/rook/.gitignore",
+      ".testmuai/rook/cache/**",
+      ".testmuai/rook/projects/*/agents/*/runs/**",
+      ".testmuai/rook/projects/*/agents/*/profiles/*.attempts.md",
+      ".testmuai/rook/projects/*/agents/*/profiles/*.README.md",
+      ".testmuai/rook/projects/*/agents/*/scripts/README.md",
+      ".testmuai/rook/projects/*/agents/*/findings.yaml"
+    ],
+    "symbols": [
+      "incident_scribe/agent.py:looks_like_injection",
+      "incident_scribe/__main__.py:_index_latest_record",
+      "incident_scribe/__main__.py:_corpus_summary",
+      "incident_scribe/__main__.py:_corpus_text",
+      "incident_scribe/__main__.py:_strip_markdown",
+      "incident_scribe/__main__.py:_GENERIC_HEADINGS",
+      "incident_scribe/__main__.py:_METADATA_BULLETS",
+      "services/ops-directory.mjs:indexIncident",
+      "services/ops-directory.mjs:persistLearned",
+      "services/ops-directory.mjs:OPERATIONS.index_incident"
+    ],
+    "_symbols_why": "looks_like_injection is never called; the rest only run on `close`, which the profile never calls."
+  },
+
+  "full_run_on": {
+    "_why": "Shared by every turn: a change here can move any scenario, so the whole gate list runs.",
+    "sources": [
+      "incident_scribe/agent.py:SCRIBE_SYSTEM",
+      "incident_scribe/agent.py:TOOLS",
+      "incident_scribe/agent.py:run_turn",
+      "incident_scribe/llm.py",
+      "incident_scribe/mcp.py",
+      "incident_scribe/__init__.py",
+      "incident_scribe/__main__.py:main",
+      "incident_scribe/__main__.py:Session",
+      "incident_scribe/__main__.py:SESSION_ROOT",
+      "incident_scribe/__main__.py:_load_dotenv",
+      "incident_scribe/__main__.py:_fail",
+      "services/ops-directory.mjs:serveMcp",
+      ".mcp.json",
+      "package.json",
+      "package-lock.json",
+      "ci/**",
+      ".github/workflows/rook-assurance.yml",
+      ".testmuai/rook/projects/*/agents/*/agent.yaml",
+      ".testmuai/rook/projects/*/agents/*/profiles/**",
+      ".testmuai/rook/projects/*/agents/*/scripts/**"
+    ]
+  },
+
+  "extra_sources": {
+    "_why": "Code that drives a feature but is missing from that feature's Rook `sources`.",
+    "F-001": [
+      "incident_scribe/agent.py:_status"
+    ],
+    "F-003": [
+      "incident_scribe/agent.py:_status",
+      "incident_scribe/agent.py:_reported_severity",
+      "incident_scribe/agent.py:_policy_severity"
+    ],
+    "F-004": [
+      "services/ops-directory.mjs:searchIncidents",
+      "services/ops-directory.mjs:lexicalRank",
+      "services/ops-directory.mjs:tokenize",
+      "services/ops-directory.mjs:cosine",
+      "services/ops-directory.mjs:embed",
+      "services/ops-directory.mjs:embedder",
+      "services/ops-directory.mjs:loadIndex",
+      "services/ops-directory.mjs:incidentText",
+      "services/ops-directory.mjs:loadLearned",
+      "services/incidents.index.json",
+      "services/incidents.learned.json"
+    ],
+    "F-006": [
+      "incident_scribe/agent.py:_status"
+    ]
+  }
+}

@@ -40,8 +40,12 @@ in the blueprint depends on it. Where a value is specific to this repo, it is ma
 
 - on every **pull request into `main`** that touches the agent, its tool server, its Rook suite,
   the gate script or the workflow. It runs against the PR's code, and the result appears as a
-  ✅ or ❌ check on the PR;
-- **on demand**, from *Actions → Rook assurance → Run workflow* on `main`.
+  ✅ or ❌ check on the PR. A PR runs **only the gated scenarios whose features its diff
+  touches**; see [section 10.1](#101-running-only-the-scenarios-a-change-affects);
+- **nightly**, on weekdays at 02:30 UTC on `main`, with the whole gate list. This catches
+  regressions a PR's selection can't see;
+- **on demand**, from *Actions → Rook assurance → Run workflow* on `main`. This runs the whole
+  gate list.
 
 PRs from **forks** do not run it, because the PR's own code would run with your secrets. See
 [section 13](#13-turning-it-into-a-real-cd-gate).
@@ -89,6 +93,7 @@ git commit .testmuai/rook/  ───────────── push ──�
 | Profile | `.testmuai/rook/projects/<slug>--<project-id>/agents/<agent>/profiles/<name>.yaml` | Says which hook script runs for each phase (`open`, `execute`, `collect`). |
 | Hook script | `…/agents/<agent>/scripts/<name>.mjs` | Starts your agent, passes it the scenario's goal, returns its reply and evidence as JSON. |
 | Gate script | `ci/rook-ci.sh` | The CI logic. Platform-neutral bash. |
+| Scenario selector | `ci/select-scenarios.mjs` + `ci/scenario-map.json` | Narrows a PR's run to the scenarios its diff can affect. |
 | Workflow | `.github/workflows/rook-assurance.yml` | GitHub-specific wiring: runner, tools, secrets, artifact upload. |
 
 ### How Rook runs in CI with no one at the keyboard
@@ -517,6 +522,72 @@ Since this repo uses the strict policy:
   is a change to one variable, with no code change.
 - Adding a scenario costs roughly 8–15 credits per CI run.
 
+### 10.1 Running only the scenarios a change affects
+
+With 20 scenarios across 6 features, a PR that only changes how one feature works shouldn't pay
+for all 20. On pull requests, `ci/select-scenarios.mjs` narrows the gate list to the scenarios
+the diff can affect. Manual runs still run the whole list.
+
+**How it decides:**
+
+1. **Diff to symbols.** For each changed file it works out the top-level symbols the changed
+   lines belong to:
+   - a `def`, `class` or assignment in `.py`;
+   - a `function` or `const` in `.mjs`/`.js`, or `CONST.key` for a key of a top-level object such
+     as `OPERATIONS.lookup_service`.
+
+   Lines that are blank or comment-only are ignored. Other files count as whole files.
+2. **Symbols to features**, from two sources:
+   - **Rook's own mapping:** every `features/F-*.yaml` lists `sources` (`file` or
+     `file:symbol`). Explore keeps these up to date.
+   - **`ci/scenario-map.json`:**
+     - `extra_sources`: code that drives a feature but is missing from its `sources`;
+     - `full_run_on`: code every turn shares, which runs the whole list;
+     - `ignore`: code the gated turns never reach, such as the `close`-only indexing path.
+3. **Features to scenarios:** each `scenarios/SC-*.yaml` has a `feature_id`. A changed scenario
+   file runs that scenario, and a changed feature file runs that feature's scenarios.
+4. **Narrow to the gate list.** Only IDs in `ROOK_SCENARIO_IDS` can be selected.
+5. **Fail-safe:** if *anything* changed that nothing maps, the **whole gate list** runs. A
+   missing mapping costs credits, never coverage.
+
+Outcomes and what the PR shows:
+
+| Mode | When | The check |
+|---|---|---|
+| `affected` | the diff maps to some gated scenarios | runs only those; must pass |
+| `all` | shared code changed (prompt, agent loop, model adapter, CLI, profile, CI) or something unmapped | runs the whole gate list |
+| `none` | the diff touches no gated scenario's feature (or only docs, comments or ignored code) | passes **without a run**; the job summary says why |
+
+Every run's **job summary** lists each changed symbol, the features it maps to and the scenarios
+it selected, so a reviewer can check the choice.
+
+Verified on this repo:
+
+| Change | Runs |
+|---|---|
+| severity logic (`_policy_severity`) | SC-008, SC-009 (F-003) |
+| the `lookup_service` tool operation | SC-004 (F-002) |
+| main prompt, `run_turn`, `llm.py`, a new unmapped function | all 3 |
+| editing `SC-008.yaml` | SC-008 |
+| `close`-only code, comment-only edits, docs | nothing |
+| customer-note cleaner (F-005), incident search (F-004) | nothing: **no gated scenario covers those features yet** |
+
+**Why the mapping can't be trusted on its own.** Rook's `sources` are a good start but
+incomplete. In this repo every feature lists `run_turn`, but none lists the main prompt
+(`SCRIBE_SYSTEM`), the severity helpers or the model adapter, even though those drive every
+answer. That's why the selector has a fail-safe and a hand-maintained map.
+
+**Keeping it accurate:**
+
+- When you add a function the agent's turns use, map it in `extra_sources` (or `full_run_on`).
+  Until then it triggers a full run, which is safe.
+- After `rook explore` updates features, check the job summaries of the next few PRs.
+- Selection can only pick from the gate list, so **grow the gate list to cover every feature**.
+  A feature with no gated scenario is never tested on PRs, as the last row above shows.
+- **Keep the scheduled full run.** This workflow runs the whole gate list nightly (section 13,
+  pattern C). Model-driven agents can regress in a feature whose code didn't change, because
+  prompts and models are shared. Selection is a cost control, not a replacement for full runs.
+
 ---
 
 ## 11. Day-to-day: when to regenerate and when not to
@@ -628,11 +699,19 @@ Note on path filters: a PR that touches none of the `paths` doesn't run the chec
 *required* check that never runs leaves the PR waiting. Either keep the check optional for such
 PRs, or drop `paths` and accept a run (and its credits) on every PR.
 
-**C. On a schedule**, to catch drift in the model provider:
+**C. On a schedule** (already in this workflow), to catch drift in the model provider and
+regressions that per-PR selection skips:
 ```yaml
 on:
-  schedule: [ { cron: "0 3 * * 1-5" } ]
+  schedule:
+    - cron: '30 2 * * 1-5'      # weekdays 02:30 UTC; runs the workflow file on main
+jobs:
+  assurance:
+    if: >-
+      ((github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') && github.ref == 'refs/heads/main') || …
 ```
+Each scheduled run spends credits for the whole gate list. GitHub may delay scheduled runs at busy
+times, and it turns off schedules in repositories with no activity for 60 days.
 
 **Cost controls** (every trigger spends credits):
 
