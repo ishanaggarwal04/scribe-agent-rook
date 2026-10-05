@@ -67,7 +67,14 @@ function runProcess(command, args, { cwd, input = "", timeoutMs = 10_000, env = 
       clearTimeout(timer);
       resolve({ code, stdout, stderr, timedOut });
     });
-    child.stdin.end(input);
+    // A command that never reads stdin (`--version`, `open`) can exit before the
+    // write lands. On Linux that is EPIPE on child.stdin, which, unhandled, killed
+    // this script before the agent ran. The exit code and output still decide.
+    child.stdin.on("error", (error) => {
+      if (error?.code !== "EPIPE") process.stderr.write(`stdin to ${command}: ${error.message}\n`);
+    });
+    if (input) child.stdin.end(input);
+    else child.stdin.end();
   });
 }
 
