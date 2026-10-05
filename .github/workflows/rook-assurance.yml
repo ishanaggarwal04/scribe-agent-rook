@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 60
     environment: rook-assurance
     env:
-      # The internal stage build already defaults to stage; said explicitly anyway.
+      # Which Rook servers the public CLI talks to: stage unless the ROOK_ENV variable says prod.
       ROOK_ENV: ${{ vars.ROOK_ENV || 'stage' }}
       ROOK_PROJECT_ID: ${{ vars.ROOK_PROJECT_ID }}
       ROOK_AGENT_ID: ${{ vars.ROOK_AGENT_ID }}
@@ -35,23 +35,15 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
-      # The internal stage CLI, released as cli-<sha> tarballs on the private
-      # LambdatestIncPrivate/rook repo; its installer needs a token that can read it.
-      - name: Install Rook stage CLI
+      # The public CLI; ROOK_ENV above points it at stage or prod.
+      - name: Install pinned public Rook CLI
         shell: bash
-        env:
-          ROOK_GITHUB_TOKEN: ${{ secrets.ROOK_GITHUB_TOKEN }}
-          ROOK_PREFIX: ${{ runner.temp }}/rook-cli
-          # Empty installs the newest cli-* release; set ROOK_CLI_VERSION to a sha to pin.
-          ROOK_VERSION: ${{ vars.ROOK_CLI_VERSION }}
         run: |
           set -euo pipefail
-          : "${ROOK_GITHUB_TOKEN:?Set ROOK_GITHUB_TOKEN to a token that can read LambdatestIncPrivate/rook}"
-          curl -fsSL -H "Authorization: Bearer $ROOK_GITHUB_TOKEN" \
-            https://raw.githubusercontent.com/LambdatestIncPrivate/rook/stage/scripts/install.sh \
+          curl -fsSL https://raw.githubusercontent.com/LambdaTest/rook/main/install.sh \
             -o "$RUNNER_TEMP/install-rook.sh"
-          bash "$RUNNER_TEMP/install-rook.sh"
-          echo "$ROOK_PREFIX/bin" >> "$GITHUB_PATH"
+          bash "$RUNNER_TEMP/install-rook.sh" --version 0.1.5 --dir "$RUNNER_TEMP/rook-bin"
+          echo "$RUNNER_TEMP/rook-bin" >> "$GITHUB_PATH"
           # Rook's home (credentials, env store) stays outside the checkout. The runner
           # context is not available in job-level env, so it is set here.
           echo "ROOK_HOME=$RUNNER_TEMP/rook-home" >> "$GITHUB_ENV"
