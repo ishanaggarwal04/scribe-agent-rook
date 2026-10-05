@@ -28,10 +28,12 @@ expected=$(jq -en --arg ids "$ROOK_SCENARIO_IDS" '
   then ($list | length) else error("Duplicate scenario IDs") end')
 for dependency in rook jq tar; do command -v "$dependency" >/dev/null; done
 
-# Rook names the project folder <slug>--<id> (or a legacy bare <id>).
-shopt -s nullglob
-project_dirs=(.testmuai/rook/projects/*--"$ROOK_PROJECT_ID" .testmuai/rook/projects/"$ROOK_PROJECT_ID")
-shopt -u nullglob
+# Rook names the project folder <slug>--<id> (or a legacy bare <id>). nullglob only
+# drops unmatched wildcards, not the literal legacy name, so keep what exists.
+project_dirs=()
+for candidate in .testmuai/rook/projects/*--"$ROOK_PROJECT_ID" .testmuai/rook/projects/"$ROOK_PROJECT_ID"; do
+  if test -d "$candidate"; then project_dirs+=("$candidate"); fi
+done
 test "${#project_dirs[@]}" -eq 1 || {
   echo "Expected exactly one committed project folder for $ROOK_PROJECT_ID, found ${#project_dirs[@]}" >&2; exit 1;
 }
@@ -65,10 +67,12 @@ printf 'SCRIBE_API_TOKEN=%s\n' "$SCRIBE_API_TOKEN" > "$env_file"
 rook env set --from "$env_file" >/dev/null
 rm -f "$env_file"
 # No discovery or generation here: sync only the reviewed checkout.
-rook sync --agent "$ROOK_AGENT_ID"
+# --yes: the runner is headless with no stored grants, so without it rook declines the
+# profile's hook and tool calls. It lasts for the one command and writes no settings.
+rook sync --agent "$ROOK_AGENT_ID" --yes
 
 run_args=(run --only "$ROOK_SCENARIO_IDS" --profile "$ROOK_PROFILE"
-  --concurrency "${ROOK_CONCURRENCY:-1}" --name "${ROOK_RUN_NAME:-ci-release-gate}")
+  --concurrency "${ROOK_CONCURRENCY:-1}" --name "${ROOK_RUN_NAME:-ci-release-gate}" --yes)
 while IFS= read -r rule; do
   test -z "$rule" || run_args+=(--allow "$rule")
 done <<< "${ROOK_ALLOW_RULES:-}"
