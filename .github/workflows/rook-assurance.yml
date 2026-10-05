@@ -1,13 +1,15 @@
 name: Rook assurance
 # Runs the reviewed Rook suite against the agent: on pull requests into main that touch the
-# agent or its suite (only the scenarios the change affects), nightly and on demand (the whole
-# gate list). Each run calls the real agent and its model provider, and spends Rook credits.
+# agent or its suite (only the scenarios the change affects), and on demand (the whole gate
+# list); an optional nightly run is commented out below. Each run calls the real agent and its
+# model provider, and spends Rook credits.
 on:
   workflow_dispatch:
-  # Nightly full run on main: catches regressions a PR's selection can't see, such as a
-  # model or prompt change moving a feature whose code did not change. 02:30 UTC, weekdays.
-  schedule:
-    - cron: '30 2 * * 1-5'
+  # Nightly full run on main (off in this demo to save credits). It catches regressions a
+  # PR's selection can't see, such as a model or prompt change moving a feature whose code
+  # did not change. To turn it on, uncomment the two lines below: 02:30 UTC, weekdays.
+  # schedule:
+  #   - cron: '30 2 * * 1-5'
   pull_request:
     branches: [main]
     paths:

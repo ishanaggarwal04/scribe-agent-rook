@@ -10,8 +10,9 @@ scenarios ([Rook docs](https://www.testmuai.com/support/docs/agent-assurance-ci-
 
 - **On a pull request** into `main` that changes the agent. It runs only the scenarios related to
   what changed.
-- **Every weekday night**, and **manually** from the Actions tab. These run all of your chosen
-  scenarios.
+- **Manually**, from the Actions tab. This runs all of your chosen scenarios.
+- **Nightly** (optional, off by default to save credits). To run all scenarios every weekday
+  night, uncomment the `schedule:` lines near the top of the workflow.
 
 ## What it does
 
