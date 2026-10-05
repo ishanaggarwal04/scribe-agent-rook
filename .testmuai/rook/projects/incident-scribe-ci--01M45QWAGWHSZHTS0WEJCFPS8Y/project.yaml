@@ -1,8 +1,0 @@
-# Cached from TMS for display. TMS is the authority.
-# id is recorded so the LISTING can recover it if the folder name no
-# longer encodes it; path resolution matches the folder name itself
-# (a legacy <id>, or the <id> suffix of a readable <slug>--<id>).
-version: 1
-id: 01M45QWAGWHSZHTS0WEJCFPS8Y
-name: incident-scribe-ci
-selected_at: '2026-10-05T09:56:20.405Z'

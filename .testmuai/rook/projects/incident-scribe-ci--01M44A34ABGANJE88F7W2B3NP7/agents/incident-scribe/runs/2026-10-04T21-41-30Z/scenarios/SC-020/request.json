@@ -1,8 +1,0 @@
-{
-  "scenario_id": "SC-020",
-  "attempt": 1,
-  "goal": "We are seeing some minor latency issues on a service, but I am not sure which service it is or what exact errors are occurring.",
-  "setup_messages": [],
-  "profile": "local",
-  "invoked": "scripts/local.mjs"
-}

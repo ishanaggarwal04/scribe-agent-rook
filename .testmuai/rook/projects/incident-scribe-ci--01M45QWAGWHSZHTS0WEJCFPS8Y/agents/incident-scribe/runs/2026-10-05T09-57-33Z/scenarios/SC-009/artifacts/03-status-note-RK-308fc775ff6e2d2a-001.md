@@ -1,1 +1,0 @@
-Our checkout service is currently unavailable and all payment processing is failing, so orders cannot be completed at this time. This is a complete outage rather than a partial slowdown. We're sorry for the disruption. Work is underway to identify the cause, and we'll share updates here as we learn more.

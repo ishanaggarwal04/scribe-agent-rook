@@ -1,8 +1,0 @@
-{
-  "scenario_id": "SC-008",
-  "attempt": 1,
-  "goal": "checkout-api is experiencing elevated latency and sporadic 504 gateway timeouts for roughly 30% of active users. The service remains operational and no transaction data or customer payments are lost.",
-  "setup_messages": [],
-  "profile": "local",
-  "invoked": "scripts/local.mjs"
-}

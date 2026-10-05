@@ -1,3 +1,0 @@
-**Checkout service disruption**
-
-Checkout is currently erroring on all payment requests, which means shoppers cannot complete purchases. This started around 10:00 UTC and affects all customers; failed payments are returning an error, and we have no indication that any money or data has been lost. We're sorry for the disruption — our team is investigating whether a recent release caused the problem and is also checking with our payment provider. We'll share another update as soon as we know more.

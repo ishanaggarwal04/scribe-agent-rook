@@ -1,8 +1,0 @@
-{
-  "scenario_id": "SC-013",
-  "attempt": 1,
-  "goal": "checkout-api seems a bit weird today, just checking in.",
-  "setup_messages": [],
-  "profile": "local",
-  "invoked": "scripts/local.mjs"
-}

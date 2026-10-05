@@ -1,8 +1,0 @@
-{
-  "scenario_id": "SC-019",
-  "attempt": 1,
-  "goal": "checkout-api is down in production. Users are unable to complete payments and receiving HTTP 500 errors across all checkout workflows.",
-  "setup_messages": [],
-  "profile": "local",
-  "invoked": "scripts/local.mjs"
-}

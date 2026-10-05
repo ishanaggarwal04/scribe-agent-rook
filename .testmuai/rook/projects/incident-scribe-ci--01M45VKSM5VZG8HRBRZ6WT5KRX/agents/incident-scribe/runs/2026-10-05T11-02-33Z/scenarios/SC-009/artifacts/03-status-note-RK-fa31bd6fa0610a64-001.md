@@ -1,1 +1,0 @@
-Our checkout service is currently unavailable — payment processing is failing for all attempts, and customers are unable to complete orders at this time. We're sorry for the disruption. Engineers are actively investigating, including checking recent changes and the status of the payment provider. We will post updates here as we learn more.
