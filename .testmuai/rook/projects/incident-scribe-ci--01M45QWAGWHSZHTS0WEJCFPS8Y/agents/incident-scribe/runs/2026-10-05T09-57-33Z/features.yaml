@@ -1,0 +1,191 @@
+- local_id: F-001
+  name: Request missing incident details
+  user_story: >-
+    As an incident reporter, I submit an incomplete incident report through execute, so that the
+    desk tells me more information is needed rather than inventing an assessment.
+  expected_behaviour: >-
+    For an incomplete incident report, the desk returns NEEDS_INPUT instead of assigning a severity,
+    and does not produce customer-note or incident-record artifacts.
+  edge_cases:
+    - Empty execute tasks are rejected.
+    - Reports with no placeable symptom return NEEDS_INPUT.
+    - No artifacts are produced for incomplete reports.
+  validation_rules:
+    - >-
+      The report must contain a symptom that can be placed in the severity matrix before severity is
+      assigned.
+  calls:
+    - configured LLM provider
+    - .scribe-sessions
+  assumptions:
+    - >-
+      The request is submitted through an existing opened session using the execute command and a
+      valid CLI token.
+    - A placeable symptom is required to assign severity.
+  sources:
+    - incident_scribe/agent.py:run_turn
+    - incident_scribe/__main__.py:main
+    - README.md
+    - docs/incident-policy.pdf
+  known_data:
+    - NEEDS_INPUT
+  confidence: null
+- local_id: F-002
+  name: Verify the affected service
+  user_story: >-
+    As an incident reporter, I submit a message naming the affected service and its symptom, so that
+    the desk verifies the service against the operations directory before attributing ownership or
+    support details.
+  expected_behaviour: >-
+    For a report naming a service, the desk uses lookup_service before stating the service owner,
+    tier, or on-call address, and incorporates the returned service facts into the assessment. The
+    lookup returns the service record or found:false.
+  edge_cases:
+    - An unregistered service produces a lookup result with found:false.
+    - >-
+      The desk must not state owner, tier, or on-call attribution without a successful current
+      lookup.
+  validation_rules:
+    - Owner, tier, and on-call address may only be stated after lookup_service supplies them.
+    - The lookup passes the service name.
+  calls:
+    - ops-directory
+    - configured LLM provider
+  assumptions:
+    - The service named by the incident is registered in the operations directory.
+    - The model selects the service lookup argument from the report.
+  sources:
+    - incident_scribe/agent.py:run_turn
+    - incident_scribe/agent.py:_ops_call
+    - services/ops-directory.mjs:OPERATIONS.lookup_service
+    - docs/incident-policy.pdf
+  confidence: null
+  known_data: []
+- local_id: F-003
+  name: Assign severity from the Northwind matrix
+  user_story: >-
+    As an incident reporter, I submit a report containing a placeable symptom, so that execute
+    returns an assessment with the matching Northwind S1, S2, or S3 severity row.
+  expected_behaviour: >-
+    The desk assesses the incident using the Northwind S1/S2/S3 severity matrix and identifies the
+    matching row in the completed assessment.
+  edge_cases:
+    - >-
+      Reports without a placeable symptom must use the NEEDS_INPUT path instead of receiving a
+      severity.
+    - The assessment must identify the matching matrix row.
+  validation_rules:
+    - Severity must come from the Northwind S1/S2/S3 matrix.
+    - A severity must not be assigned when no placeable symptom is present.
+  calls:
+    - ops-directory
+    - configured LLM provider
+  assumptions:
+    - >-
+      The report contains enough information for the model to select a row in the Northwind severity
+      matrix.
+  sources:
+    - incident_scribe/agent.py:run_turn
+    - docs/incident-policy.pdf
+    - README.md
+  known_data:
+    - S1
+    - S2
+    - S3
+  confidence: null
+- local_id: F-004
+  name: Compare against prior incidents
+  user_story: >-
+    As an incident reporter, I submit a service incident with a symptom, so that the desk considers
+    the service's prior incidents and similar recorded incidents in its assessment.
+  expected_behaviour: >-
+    The desk consults recorded incident history while assessing a named service, using
+    recent_incidents for the service's filing history and search_incidents when the report symptom
+    can be compared with prior incidents.
+  edge_cases:
+    - Prior-history retrieval is for a named service.
+    - Symptom comparison may use a service filter and an optional incident limit.
+    - Search results are returned in relevance order; recent incidents are newest first.
+  validation_rules:
+    - recent_incidents receives a service name and optional incident limit.
+    - >-
+      search_incidents receives a symptom query, optional service filter, and optional incident
+      limit.
+  calls:
+    - ops-directory
+    - configured LLM provider
+  assumptions:
+    - >-
+      The report names a service or contains a symptom suitable for comparison with recorded
+      incidents.
+  sources:
+    - incident_scribe/agent.py:run_turn
+    - incident_scribe/agent.py:_ops_call
+    - services/ops-directory.mjs:OPERATIONS.recent_incidents
+    - services/ops-directory.mjs:OPERATIONS.search_incidents
+  confidence: null
+  known_data: []
+- local_id: F-005
+  name: Produce a safe customer incident note
+  user_story: >-
+    As a customer affected by a reported incident, I submit an incident report through execute, so
+    that the desk returns a concise customer-facing note without exposing internal operational
+    details.
+  expected_behaviour: >-
+    After completing an assessment, the desk delegates customer-note generation to the tool-less
+    comms-writer with the assessment, service, tier, owning team, runbook URL, and on-call address.
+    It returns a customer-facing three- or four-sentence note that excludes prohibited internal
+    information.
+  edge_cases:
+    - >-
+      The note must not reveal internal runbook URLs, on-call email addresses, internal hostnames,
+      or severity codes.
+    - The delegated writer returns a three- or four-sentence note.
+    - Internal information may also be removed by the desk's sanitizer.
+  validation_rules:
+    - The note must not expose internal runbook URLs.
+    - The note must not expose on-call email addresses, internal hostnames, or severity codes.
+    - The note is generated only after a completed assessment.
+  calls:
+    - comms-writer
+    - configured LLM provider
+  assumptions:
+    - >-
+      The desk has produced a completed assessment and has the verified service facts required by
+      the writer.
+  sources:
+    - incident_scribe/agent.py:run_turn
+    - incident_scribe/agent.py:_clean_note
+    - incident_scribe/agent.py:COMMS_SYSTEM
+    - docs/incident-policy.pdf
+  confidence: null
+  known_data: []
+- local_id: F-006
+  name: Persist completed incident artifacts
+  user_story: >-
+    As an incident operator, I submit a complete report in an existing session, so that execute
+    returns machine-readable results and paths to the persisted customer-note and incident-record
+    artifacts.
+  expected_behaviour: >-
+    For a completed execute turn, the desk persists session state and transcript data and produces
+    JSON customer-note and incident-record artifacts, returning artifact paths together with the
+    response.
+  edge_cases:
+    - Empty tasks, invalid session identifiers, missing sessions, and closed sessions are rejected.
+    - Incomplete reports do not produce completion artifacts.
+  validation_rules:
+    - A valid CLI token is required on every command.
+    - The session must exist, be open, and have a valid identifier.
+    - Empty execute tasks are rejected.
+    - Incomplete reports return NEEDS_INPUT without artifacts.
+  calls:
+    - .scribe-sessions
+  assumptions:
+    - The execute request uses a valid existing session and reaches completion.
+    - The session storage directory is writable.
+  sources:
+    - incident_scribe/agent.py:run_turn
+    - incident_scribe/__main__.py:Session
+    - README.md
+  confidence: null
+  known_data: []

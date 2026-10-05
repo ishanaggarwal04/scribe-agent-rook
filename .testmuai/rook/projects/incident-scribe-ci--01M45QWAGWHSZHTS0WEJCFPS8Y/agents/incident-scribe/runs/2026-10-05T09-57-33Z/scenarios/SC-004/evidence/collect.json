@@ -1,0 +1,30 @@
+{
+  "conversation": "RK-9681ec37f3dfbf13",
+  "evidence_file": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\7b3eace5e0eeee9d\\evidence-RK-9681ec37f3dfbf13.json",
+  "artifacts_written": [],
+  "images": [],
+  "calls": [
+    {
+      "name": "lookup_service",
+      "arguments": {
+        "name": "billing-gateway-v9"
+      }
+    },
+    {
+      "name": "search_incidents",
+      "arguments": {
+        "limit": 5,
+        "query": "all POST requests failing with 500 errors"
+      }
+    },
+    {
+      "name": "recent_incidents",
+      "arguments": {
+        "limit": 5,
+        "service": "billing-gateway-v9"
+      }
+    }
+  ],
+  "attempt": 1,
+  "execution": "9ff5ed3f-699a-4ace-98ea-a13791258b96"
+}

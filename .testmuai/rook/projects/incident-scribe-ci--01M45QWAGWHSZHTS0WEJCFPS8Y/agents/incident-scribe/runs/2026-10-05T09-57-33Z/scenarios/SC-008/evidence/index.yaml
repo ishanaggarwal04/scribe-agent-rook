@@ -1,0 +1,7 @@
+files:
+  - read: >-
+      .testmuai\rook\projects\incident-scribe-ci--01M45QWAGWHSZHTS0WEJCFPS8Y\agents\incident-scribe\runs\2026-10-05T09-57-33Z\scenarios\SC-008\artifacts\02-incident-record-RK-17f3f2aa81e107a3-001.json
+    stored_as: 1-02-incident-record-RK-17f3f2aa81e107a3-001.json
+  - read: >-
+      .testmuai\rook\projects\incident-scribe-ci--01M45QWAGWHSZHTS0WEJCFPS8Y\agents\incident-scribe\runs\2026-10-05T09-57-33Z\scenarios\SC-008\response.json
+    stored_as: 2-response.json

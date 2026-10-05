@@ -1,0 +1,56 @@
+local_id: SC-003
+title: Verifies reported service name against ops-directory before stating owner or tier details
+feature_id: F-002
+feature_revision_id: sha256:dfc3139aef6516747272855c6439b5bc47783b15d736515fbe05159aff5c9d69
+goal: Service checkout-api is throwing 500 errors on all payment processing requests since 10:00 UTC.
+input_kind: text
+acceptance_criteria:
+  - statement: >-
+      The agent issues a call to ops-directory lookup_service with the exact service name
+      checkout-api.
+    check: llm_judge
+  - statement: >-
+      The agent's response incorporates verified service facts returned by lookup_service for
+      checkout-api.
+    check: llm_judge
+  - statement: The agent does not query lookup_service for a different or hallucinated service name.
+    check: llm_judge
+forbidden: []
+why: >-
+  Catches FI-004 where the desk calls lookup_service with a service name different from the one
+  reported in the incident.
+confidence: high
+verification_requires:
+  - type: mcp
+    server: ops-directory
+attachments: []
+preconditions:
+  - The operations directory server ops-directory is running with checkout-api registered.
+output_kind: json
+exercises:
+  tools:
+    - lookup_service
+  subagents: []
+  services:
+    - ops-directory
+calls:
+  - tool: lookup_service
+    expect: called
+multi_turn: false
+setup_messages: []
+max_turns: 3
+repeat: 1
+timeout_seconds: null
+tags:
+  - integration
+  - ops-directory
+  - F-002
+  - service-verification
+class: functional
+category: integration
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources: []

@@ -1,0 +1,54 @@
+local_id: SC-007
+title: Complete outage of a Tier-3 service resolves to S3 severity under the Northwind matrix
+feature_id: F-003
+feature_revision_id: sha256:25fd3061662ae226de180cb603db130c1ac6ccb782173d78b046919e7f31da26
+goal: >-
+  The search-indexer service is completely down and failing 100% of indexing jobs across all cluster
+  nodes.
+input_kind: text
+acceptance_criteria:
+  - statement: The assessment identifies search-indexer as a Tier 3 service based on directory lookup.
+    check: llm_judge
+  - statement: >-
+      The assessment assigns S3 severity, citing the Northwind matrix rule that any Tier-3 service
+      maps to S3 regardless of outage extent.
+    check: llm_judge
+  - statement: >-
+      The assessment explicitly refrains from assigning S1 severity despite the total service
+      outage.
+    check: llm_judge
+forbidden:
+  - S1
+why: >-
+  Catches the agent misclassifying a total outage on a Tier-3 service as S1 instead of adhering to
+  the policy boundary mapping all Tier-3 services to S3.
+confidence: high
+verification_requires: []
+attachments: []
+preconditions:
+  - 'ops-directory contains record for search-indexer with tier: 3'
+output_kind: text
+exercises:
+  tools:
+    - lookup_service
+  subagents: []
+  services: []
+calls:
+  - tool: lookup_service
+    expect: called
+multi_turn: false
+setup_messages: []
+max_turns: null
+repeat: 1
+timeout_seconds: null
+tags: []
+class: functional
+category: boundary
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources:
+  - README.md
+  - docs\incident-policy.pdf

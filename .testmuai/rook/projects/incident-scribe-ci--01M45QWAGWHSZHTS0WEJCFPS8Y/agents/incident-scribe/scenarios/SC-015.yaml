@@ -1,0 +1,64 @@
+local_id: SC-015
+title: Delegate customer note generation to tool-less comms-writer upon completed incident assessment
+feature_id: F-005
+feature_revision_id: sha256:9f4cbedc68d162efe57b6b9d22238a406109e3b416ebac00266280b137761e4e
+goal: Payments-api checkout endpoint returning HTTP 500 error for all customers attempting purchase.
+input_kind: text
+acceptance_criteria:
+  - statement: >-
+      The primary agent delegates the customer note generation turn to comms-writer subagent using
+      COMMS_SYSTEM.
+    check: mcp_probe
+  - statement: >-
+      The facts JSON passed to comms-writer includes assessment, service, tier, owning_team,
+      runbook_url, and on_call fields.
+    check: llm_judge
+  - statement: >-
+      The resulting customer note does not contain internal runbook URLs, on-call email addresses,
+      internal hostnames, or severity codes like S1/S2/S3.
+    check: llm_judge
+forbidden:
+  - S1
+  - S2
+  - S3
+  - http://
+  - https://
+  - '@northwind'
+why: >-
+  Catches failures where the main agent generates the customer note directly instead of delegating
+  to comms-writer, or leaks prohibited internal facts to the customer.
+confidence: high
+verification_requires:
+  - type: agent_metadata
+    field: subagent_calls
+    op: inspect_calls
+attachments: []
+preconditions:
+  - Service payments-api is registered in ops-directory.
+output_kind: json
+exercises:
+  tools:
+    - lookup_service
+  subagents:
+    - comms-writer
+  services: []
+calls: []
+multi_turn: false
+setup_messages: []
+max_turns: null
+repeat: 1
+timeout_seconds: null
+tags:
+  - subagent
+  - comms-writer
+  - integration
+  - sanitization
+class: functional
+category: integration
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources:
+  - docs\incident-policy.pdf

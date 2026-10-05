@@ -1,0 +1,63 @@
+local_id: SC-010
+title: Query service history and search symptom across prior incident corpus
+feature_id: F-004
+feature_revision_id: sha256:7c0b57bae352341891d0b94d8d58f2bdb231dcc0e934e333d0f0b0c608bb9871
+goal: >-
+  The auth-service is experiencing 504 gateway timeouts and high CPU usage under peak load. Check
+  prior incident history for auth-service and search for similar latency symptoms across all
+  services.
+input_kind: text
+acceptance_criteria:
+  - statement: The agent calls lookup_service on ops-directory for auth-service.
+    check: llm_judge
+  - statement: >-
+      The agent invokes recent_incidents on ops-directory passing 'auth-service' as the service
+      parameter.
+    check: llm_judge
+  - statement: >-
+      The agent invokes search_incidents on ops-directory with a symptom query related to timeouts
+      or CPU usage.
+    check: llm_judge
+  - statement: The assessment incorporates historical incident context or findings returned by ops-directory.
+    check: llm_judge
+forbidden: []
+why: >-
+  Catches failure to combine service-specific recent history lookup and corpus-wide symptom search
+  during incident assessment.
+confidence: medium
+verification_requires: []
+attachments: []
+preconditions:
+  - ops-directory MCP server is reachable and contains service records for auth-service.
+output_kind: text
+exercises:
+  tools:
+    - lookup_service
+    - recent_incidents
+    - search_incidents
+  subagents: []
+  services: []
+calls:
+  - tool: lookup_service
+    expect: called
+    server: ops-directory
+  - tool: recent_incidents
+    expect: called
+    server: ops-directory
+  - tool: search_incidents
+    expect: called
+    server: ops-directory
+multi_turn: false
+setup_messages: []
+max_turns: null
+repeat: 1
+timeout_seconds: null
+tags: []
+class: functional
+category: integration
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources: []

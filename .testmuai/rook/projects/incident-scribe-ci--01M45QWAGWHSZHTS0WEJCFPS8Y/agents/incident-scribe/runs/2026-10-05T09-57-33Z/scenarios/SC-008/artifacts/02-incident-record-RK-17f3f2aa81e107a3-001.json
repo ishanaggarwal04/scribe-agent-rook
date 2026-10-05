@@ -1,0 +1,15 @@
+{
+  "session_id": "RK-17f3f2aa81e107a3",
+  "service": "checkout-api",
+  "owning_team": "payments",
+  "tier": 1,
+  "severity": "S2",
+  "assessment": "STATUS: COMPLETE\nSEVERITY: S2 \u2014 matched row: \"a tier-1 or tier-2 service is degraded for many users.\"\n\n**Assessment**\n\n- **Service:** checkout-api, owned by the **payments** team (tier 1). On-call: payments-oncall@northwind.example. Runbook: https://runbooks.internal.northwind/checkout-api\n- **Severity:** S2. The service is a tier-1 service but remains operational, and the report explicitly states no transaction or payment data was lost, so the S1 row (unavailability, or money/data loss) does not apply. Latency and 504s affecting ~30% of active users is degradation for many users, which matches the S2 row exactly.\n- **Prior history:** Yes, similar symptoms have occurred before on this service:\n  - **INC-2041** (S1, 2026-07-14) \u2014 \"Card authorisation timeouts\": checkout hangs and shoppers saw timeouts on charge requests, caused by the payment provider degrading its endpoint during a certificate rotation. Strong symptom overlap with this report.\n  - **INC-2098** (S2, 2026-08-02) \u2014 \"Elevated 5xx on /v2/charge\": intermittent payment failures and a 5xx spike caused by a connection-pool regression after a deploy. Also relevant if a recent deploy preceded this incident.\n\nSuggested next checks for the responder: whether a recent deploy preceded the latency spike (as in INC-2098) and whether the payment provider is degraded (as in INC-2041).",
+  "customer_note": "**Status update: Checkout service**\n\nSome customers may notice slow performance or errors when trying to complete a purchase \u2014 about 30% of active users are currently affected. The checkout service itself is still running, and no transactions or payment data have been lost. We're sorry for the disruption. We're investigating the cause and will share another update as soon as we know more.",
+  "tools_called": [
+    "lookup_service",
+    "search_incidents",
+    "recent_incidents",
+    "comms_writer_subagent"
+  ]
+}
