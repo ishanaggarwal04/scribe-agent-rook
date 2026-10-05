@@ -1,15 +1,37 @@
 name: Rook assurance
-# Manual only: execution calls the real agent and its model provider, and spends Rook credits.
+# Runs the reviewed Rook suite against the agent: on pull requests into main that touch the
+# agent or its suite, and on demand. Each run calls the real agent and its model provider,
+# and spends Rook credits.
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'incident_scribe/**'
+      - 'services/**'
+      - '.mcp.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.testmuai/rook/**'
+      - 'ci/**'
+      - '.github/workflows/rook-assurance.yml'
 permissions:
   contents: read
 concurrency:
-  group: rook-assurance
+  # One run per PR (or per branch for manual runs). Never cancel a run in progress: it
+  # has already spent credits and its evidence is worth keeping.
+  group: rook-assurance-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 jobs:
   assurance:
-    if: github.ref == 'refs/heads/main'
+    # The PR's own code runs with these secrets: the agent and the profile's hook scripts.
+    # So only PRs from branches in this repository run. Fork PRs get no secrets from
+    # `pull_request` anyway, and `pull_request_target` must never be used here
+    # (TestMu AI: "Do not run untrusted pull-request hook scripts with repository secrets.").
+    # Manual runs stay limited to main.
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04
     # One scenario at a time, and a single execute can take up to ~50 s on the configured model.
     timeout-minutes: 60
@@ -25,7 +47,8 @@ jobs:
       ROOK_SCENARIO_IDS: ${{ vars.ROOK_SCENARIO_IDS }}
       ROOK_ALLOW_RULES: ${{ vars.ROOK_ALLOW_RULES }}
       ROOK_CONCURRENCY: ${{ vars.ROOK_CONCURRENCY }}
-      ROOK_RUN_NAME: github-${{ github.run_id }}-${{ github.run_attempt }}
+      # Dashboard label: github-pr12-<run>-<attempt> for a PR, github-<run>-<attempt> otherwise.
+      ROOK_RUN_NAME: github-${{ github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || '' }}${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v7
         with:
