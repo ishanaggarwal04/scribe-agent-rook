@@ -1,0 +1,72 @@
+scenario_id: SC-007
+run_id: 2026-10-04T21-07-16Z
+status: Fail
+criteria:
+  - criterion_id: C1
+    criterion: The assessment identifies search-indexer as a Tier 3 service based on directory lookup.
+    expected: Identify search-indexer as a Tier 3 service based on a directory lookup.
+    achieved: >-
+      The agent identified search-indexer as tier 3 and rook observed one lookup_service call for
+      search-indexer.
+    status: Pass
+    evidence: >-
+      Agent response: "Service: search-indexer — tier 3"; observed tool calls record
+      "lookup_service" once with arguments {"name":"search-indexer"}.
+    confidence: High
+  - criterion_id: C2
+    criterion: >-
+      The assessment assigns S3 severity, citing the Northwind matrix rule that any Tier-3 service
+      maps to S3 regardless of outage extent.
+    expected: >-
+      Assign S3 using the Northwind matrix rule that a Tier-3 service maps to S3 regardless of
+      outage extent.
+    achieved: >-
+      The agent assigned S3 and explained that the Tier-3 classification controls the result
+      regardless of the outage scale.
+    status: Pass
+    evidence: >-
+      "SEVERITY: S3 ... Because search-indexer is a tier-3 service, it lands at S3 regardless of the
+      scale of the indexing failures."
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The assessment explicitly refrains from assigning S1 severity despite the total service
+      outage.
+    expected: Explicitly refrain from assigning S1 despite the total outage.
+    achieved: >-
+      The agent explicitly said that the complete outage does not qualify for S1 because the
+      affected service is not Tier 1.
+    status: Pass
+    evidence: >-
+      "It does not meet S1 or S2, which require a tier-1 or tier-2 service to be unavailable or
+      degraded."
+    confidence: High
+  - criterion_id: CALL-01
+    criterion: lookup_service was called
+    expected: called
+    achieved: called, from the hook
+    status: Pass
+    evidence: lookup_service is in the record rook holds for this scenario, reported by the hook
+    confidence: High
+pass_count: 4
+fail_count: 0
+unable_to_verify_count: 0
+compliance_percentage: 100
+forbidden_hits:
+  - S1
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 0.8
+  response_quality: 0.9
+latency_ms: 111935
+turns: 1
+usage:
+  input_tokens: 1806
+  output_tokens: 4046
+summary: >-
+  The agent performed the directory and incident lookups and correctly assessed the Tier-3
+  search-indexer outage as S3, explicitly rejecting S1. The response contains the forbidden string
+  "S1", but this is required by C3's demand to explicitly refrain from S1, so the forbidden-content
+  tripwire conflicts with the scenario criterion rather than evidencing an agent defect.

@@ -1,0 +1,85 @@
+scenario_id: SC-005
+run_id: 2026-10-04T21-41-30Z
+status: Fail
+criteria:
+  - criterion_id: C1
+    criterion: >-
+      The response or status indicates NEEDS_INPUT and requests clarification rather than assigning
+      an S1, S2, or S3 severity level.
+    expected: Indicate NEEDS_INPUT and request clarification instead of assigning an S1, S2, or S3 severity.
+    achieved: >-
+      The agent returned NEEDS_INPUT, explicitly declined to place a severity without a concrete
+      symptom, and requested a concrete failing behavior.
+    status: Pass
+    evidence: >-
+      "STATUS: NEEDS_INPUT\nI have no session-inspection tool ... with no concrete symptom I still
+      can't place a severity or match against past incidents. Can you name one concrete thing that
+      looks wrong in the portal"
+    confidence: High
+  - criterion_id: C2
+    criterion: The agent does not generate customer-note or incident-record artifacts for this report.
+    expected: Do not generate customer-note or incident-record artifacts for the incomplete report.
+    achieved: >-
+      The structured agent response reports null customer-note and incident-record artifact fields,
+      but the filesystem was not watched during execution, so the absence of actual artifact
+      creation cannot be independently established.
+    status: Unable to Verify
+    evidence: >-
+      The captured response reports:
+      "\"customer_note\":null,\"note_file\":null,\"incident_record_file\":null"; however, it also
+      states: "the filesystem was not observed for this scenario, so nothing can be concluded from
+      the absence of changes".
+    confidence: Low
+  - criterion_id: C3
+    criterion: >-
+      The response does not invent an affected service tier, owning team, or on-call contact
+      details.
+    expected: Do not invent an affected service tier, owning team, or on-call contact details.
+    achieved: >-
+      The agent did not state a tier, owning team, or on-call contact. Its structured response also
+      reports no selected service, team, or tier.
+    status: Pass
+    evidence: >-
+      "I have no session-inspection tool — my visibility is limited to the service registry and the
+      incident log" and the response reports "\"service\":null,\"owning_team\":null,\"tier\":null".
+    confidence: High
+  - criterion_id: CALL-01
+    criterion: lookup_service was not called
+    expected: not_called
+    achieved: called, from the hook and trace
+    status: Fail
+    evidence: >-
+      lookup_service was called and the scenario says it must not be — reported by the hook and
+      trace with {"name":"portal"}
+    confidence: High
+  - criterion_id: CALL-02
+    criterion: comms-writer was not called
+    expected: not_called
+    achieved: not observed
+    status: Unable to Verify
+    evidence: >-
+      6 call(s) were observed from the hook and 6 from the trace, and comms-writer is not among them
+      — rook cannot show that record is complete, so this is not proof it was never called (#975)
+    confidence: High
+verification_gaps:
+  - the scenario expects json output, and rook graded it from the reply alone
+pass_count: 2
+fail_count: 1
+unable_to_verify_count: 2
+compliance_percentage: 67
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 0.95
+  context_awareness: 0.98
+  hallucination_detection: 0.95
+  response_quality: 0.95
+latency_ms: 73878
+turns: 3
+usage:
+  input_tokens: 3931
+  output_tokens: 421
+summary: >-
+  The agent appropriately returned NEEDS_INPUT and asked for a concrete symptom without assigning
+  severity or inventing service ownership details. Artifact non-creation could not be independently
+  verified because the scenario did not observe the filesystem.

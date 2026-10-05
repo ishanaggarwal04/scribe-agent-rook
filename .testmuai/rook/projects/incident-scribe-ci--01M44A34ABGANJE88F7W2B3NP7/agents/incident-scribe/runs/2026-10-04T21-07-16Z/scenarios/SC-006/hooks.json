@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:09:14.397Z",
+      "durationMs": 649,
+      "data": {
+        "conversation": "RK-f69e5fa9d3cb32c8"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": false,
+      "at": "2026-10-04T21:11:14.796Z",
+      "durationMs": 120386,
+      "data": {
+        "attempt": 1,
+        "execution": "eee36a6d-daca-42d1-bb2b-017788a355f7"
+      },
+      "error": "execute exceeded 120 seconds and was stopped"
+    }
+  },
+  "conversation": "RK-f69e5fa9d3cb32c8"
+}

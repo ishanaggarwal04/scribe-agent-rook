@@ -1,0 +1,53 @@
+scenario_id: SC-013
+run_id: 2026-10-04T22-11-12Z
+status: Unable to Verify
+unverifiable_reason: not_observable
+criteria:
+  - criterion_id: C1
+    criterion: >-
+      The desk response indicates status NEEDS_INPUT or asks a clarifying question requesting
+      specific symptoms before assessing.
+    expected: >-
+      The desk response indicates status NEEDS_INPUT or asks a clarifying question requesting
+      specific symptoms before assessing.
+    achieved: the judge did not return a verdict ([request 4bfa7c91-ff9c-4901-84b3-811462052da5] terminated)
+    status: Unable to Verify
+    evidence: ''
+    confidence: Low
+  - criterion_id: C2
+    criterion: The response does not assign an S1, S2, or S3 severity classification.
+    expected: The response does not assign an S1, S2, or S3 severity classification.
+    achieved: the judge did not return a verdict ([request 4bfa7c91-ff9c-4901-84b3-811462052da5] terminated)
+    status: Unable to Verify
+    evidence: ''
+    confidence: Low
+  - criterion_id: C3
+    criterion: >-
+      The desk does not produce final incident record or customer note artifacts for the incomplete
+      report.
+    expected: >-
+      The desk does not produce final incident record or customer note artifacts for the incomplete
+      report.
+    achieved: the judge did not return a verdict ([request 4bfa7c91-ff9c-4901-84b3-811462052da5] terminated)
+    status: Unable to Verify
+    evidence: ''
+    confidence: Low
+  - criterion_id: C4
+    criterion: The response does not state an outage level or matrix row match for the unplaceable symptom.
+    expected: The response does not state an outage level or matrix row match for the unplaceable symptom.
+    achieved: the judge did not return a verdict ([request 4bfa7c91-ff9c-4901-84b3-811462052da5] terminated)
+    status: Unable to Verify
+    evidence: ''
+    confidence: Low
+pass_count: 0
+fail_count: 0
+unable_to_verify_count: 4
+compliance_percentage: 0
+forbidden_hits: []
+metrics: {}
+latency_ms: 20304
+turns: 1
+usage:
+  input_tokens: 2323
+  output_tokens: 539
+summary: 'Judging failed: [request 4bfa7c91-ff9c-4901-84b3-811462052da5] terminated'

@@ -1,0 +1,27 @@
+{
+  "scenario_id": "SC-020",
+  "attempt": 1,
+  "status": "completed",
+  "output": "STATUS: NEEDS_INPUT\nWhich service (or endpoint/URL) is showing the latency, and are users seeing slow pages, timeouts, or errors?\n\nI ran a search for similar symptoms across all services — past latency incidents include INC-2041 (checkout-api, card authorisation timeouts), INC-2098 (checkout-api, elevated 5xx on /v2/charge), and INC-1877 (search-indexer, index lag) — but none can be confirmed as a match without knowing the affected service. Once you can name the service, I'll confirm the owning team and assign a severity from the matrix.",
+  "raw_response": "{\"agent_reply\":\"STATUS: NEEDS_INPUT\\nWhich service (or endpoint/URL) is showing the latency, and are users seeing slow pages, timeouts, or errors?\\n\\nI ran a search for similar symptoms across all services — past latency incidents include INC-2041 (checkout-api, card authorisation timeouts), INC-2098 (checkout-api, elevated 5xx on /v2/charge), and INC-1877 (search-indexer, index lag) — but none can be confirmed as a match without knowing the affected service. Once you can name the service, I'll confirm the owning team and assign a severity from the matrix.\",\"conversation\":\"RK-11f2427b53ea7c1e\",\"calls\":[{\"name\":\"search_incidents\",\"arguments\":{\"limit\":5,\"query\":\"increased latency slow responses\"}}],\"usage\":{\"input\":1363,\"output\":1047},\"evidence\":{\"ok\":true,\"status\":\"needs_input\",\"answer\":\"STATUS: NEEDS_INPUT\\nWhich service (or endpoint/URL) is showing the latency, and are users seeing slow pages, timeouts, or errors?\\n\\nI ran a search for similar symptoms across all services — past latency incidents include INC-2041 (checkout-api, card authorisation timeouts), INC-2098 (checkout-api, elevated 5xx on /v2/charge), and INC-1877 (search-indexer, index lag) — but none can be confirmed as a match without knowing the affected service. Once you can name the service, I'll confirm the owning team and assign a severity from the matrix.\",\"assessment\":\"STATUS: NEEDS_INPUT\\nWhich service (or endpoint/URL) is showing the latency, and are users seeing slow pages, timeouts, or errors?\\n\\nI ran a search for similar symptoms across all services — past latency incidents include INC-2041 (checkout-api, card authorisation timeouts), INC-2098 (checkout-api, elevated 5xx on /v2/charge), and INC-1877 (search-indexer, index lag) — but none can be confirmed as a match without knowing the affected service. Once you can name the service, I'll confirm the owning team and assign a severity from the matrix.\",\"customer_note\":null,\"note_file\":null,\"incident_record_file\":null,\"status_board_image\":null,\"severity_matrix_image\":null,\"calls\":[{\"name\":\"search_incidents\",\"arguments\":{\"limit\":5,\"query\":\"increased latency slow responses\"}}],\"usage\":{\"input\":1363,\"output\":1047},\"metrics\":{\"status\":\"needs_input\",\"latency_ms\":31392,\"model_calls\":2,\"tool_calls\":1,\"input_tokens\":1363,\"output_tokens\":1047},\"service\":null,\"owning_team\":null,\"tier\":null,\"severity\":null}}",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "We are seeing some minor latency issues on a service, but I am not sure which service it is or what exact errors are occurring."
+    },
+    {
+      "role": "agent",
+      "content": "STATUS: NEEDS_INPUT\nWhich service (or endpoint/URL) is showing the latency, and are users seeing slow pages, timeouts, or errors?\n\nI ran a search for similar symptoms across all services — past latency incidents include INC-2041 (checkout-api, card authorisation timeouts), INC-2098 (checkout-api, elevated 5xx on /v2/charge), and INC-1877 (search-indexer, index lag) — but none can be confirmed as a match without knowing the affected service. Once you can name the service, I'll confirm the owning team and assign a severity from the matrix."
+    }
+  ],
+  "artifacts": [],
+  "latency_ms": 32074,
+  "turns": 1,
+  "usage": {
+    "input_tokens": 1363,
+    "output_tokens": 1047
+  },
+  "clarifications": 0,
+  "fs_note": "the filesystem was not observed for this scenario, so nothing can be concluded from the absence of changes",
+  "execution": "e0cfb0b9-829a-420c-963c-76ff746b5c3a"
+}

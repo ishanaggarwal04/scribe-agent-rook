@@ -1,0 +1,50 @@
+{
+  "role": "judge_response",
+  "calls": [],
+  "answer": {
+    "criteria": [
+      {
+        "achieved": "The desk returned NEEDS_INPUT and requested concrete, matchable symptoms before assessing.",
+        "confidence": "High",
+        "criterion_id": "C1",
+        "evidence": "\"STATUS: NEEDS_INPUT\" and \"What specifically is off (e.g. failed card payments, 5xx errors, slow checkout, timeouts)?\"",
+        "expected": "Indicate NEEDS_INPUT or ask for specific symptoms before making an assessment.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The desk explicitly declined to assign a severity to the reported condition. The S1 and S2 references identify prior incidents, not a classification of this report.",
+        "confidence": "High",
+        "criterion_id": "C2",
+        "evidence": "\"no severity can be assigned from it\" and \"INC-2041 (card authorisation timeouts, S1) and INC-2098 (elevated 5xx on /v2/charge after a deploy, S2)\"",
+        "expected": "Do not assign the current report an S1, S2, or S3 classification.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "No artifact creation was claimed, and rook recorded no changed files, but the filesystem was not observed; therefore artifact absence cannot be established.",
+        "confidence": "Low",
+        "criterion_id": "C3",
+        "evidence": "The reply contains no claim of an incident record or customer-note artifact; it instead says, \"no severity can be assigned from it.\"",
+        "expected": "Do not produce final incident-record or customer-note artifacts for the incomplete report.",
+        "status": "Unable to Verify"
+      },
+      {
+        "achieved": "The desk did not state an outage level or matrix-row match for the current vague report; it said a symptom was required first.",
+        "confidence": "High",
+        "criterion_id": "C4",
+        "evidence": "\"doesn't name a symptom I can match\" and \"I can't say whether this is a repeat until you describe the actual symptom.\"",
+        "expected": "Do not state an outage level or severity-matrix row match for the unplaceable symptom.",
+        "status": "Pass"
+      }
+    ],
+    "attempted": true,
+    "forbidden_hits": [],
+    "summary": "The agent made a genuine NEEDS_INPUT response, requested specific symptoms, and did not classify the current report. Artifact non-production could not be verified because the scenario filesystem was not observed, despite no changed files being recorded.",
+    "metrics": {
+      "bias_detection": 1,
+      "completeness": 1,
+      "context_awareness": 1,
+      "hallucination_detection": 1,
+      "response_quality": 0.95
+    }
+  }
+}

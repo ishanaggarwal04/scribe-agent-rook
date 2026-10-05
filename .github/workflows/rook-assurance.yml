@@ -1,0 +1,67 @@
+name: Rook assurance
+# Manual only: execution calls the real agent and its model provider, and spends Rook credits.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rook-assurance
+  cancel-in-progress: false
+jobs:
+  assurance:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    # One scenario at a time, and a single execute can take up to ~50 s on the configured model.
+    timeout-minutes: 60
+    environment: rook-assurance
+    env:
+      ROOK_ENV: prod
+      ROOK_HOME: ${{ runner.temp }}/rook-home
+      ROOK_PROJECT_ID: ${{ vars.ROOK_PROJECT_ID }}
+      ROOK_AGENT_ID: ${{ vars.ROOK_AGENT_ID }}
+      ROOK_PROFILE: ${{ vars.ROOK_PROFILE }}
+      ROOK_SCENARIO_IDS: ${{ vars.ROOK_SCENARIO_IDS }}
+      ROOK_ALLOW_RULES: ${{ vars.ROOK_ALLOW_RULES }}
+      ROOK_CONCURRENCY: ${{ vars.ROOK_CONCURRENCY }}
+      ROOK_RUN_NAME: github-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # incident-scribe is a Python CLI that spawns its Node ops-directory MCP server.
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Install pinned public Rook CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/LambdaTest/rook/main/install.sh \
+            -o "$RUNNER_TEMP/install-rook.sh"
+          bash "$RUNNER_TEMP/install-rook.sh" --version 0.1.5 --dir "$RUNNER_TEMP/rook-bin"
+          echo "$RUNNER_TEMP/rook-bin" >> "$GITHUB_PATH"
+          command -v jq
+      - name: Run the reviewed suite
+        shell: bash
+        env:
+          LT_USERNAME: ${{ secrets.LT_USERNAME }}
+          LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+          # The profile's declared variable.
+          SCRIBE_API_TOKEN: ${{ secrets.SCRIBE_API_TOKEN }}
+          # The agent's own model configuration (its .env locally).
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER }}
+          ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+          GLM_MODEL: ${{ vars.GLM_MODEL }}
+          GLM_API_KEY: ${{ secrets.GLM_API_KEY }}
+        run: bash ci/rook-ci.sh
+      - name: Preserve results even on failure
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rook-${{ github.run_id }}-${{ github.run_attempt }}
+          path: rook-results/
+          if-no-files-found: warn
+          retention-days: 7

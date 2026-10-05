@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:11:22.277Z",
+      "durationMs": 632,
+      "data": {
+        "conversation": "RK-1095b85c286fbd2a"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:11:46.354Z",
+      "durationMs": 24074,
+      "data": {
+        "attempt": 1,
+        "execution": "e70236db-4586-4554-a8f3-05e65552f16e",
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "auth-service"
+            },
+            "turn": 1
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "service": "auth-service"
+            },
+            "turn": 1
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "query": "504 gateway timeouts high CPU under peak load",
+              "service": "auth-service"
+            },
+            "turn": 1
+          }
+        ],
+        "conversation": "RK-1095b85c286fbd2a"
+      }
+    }
+  },
+  "conversation": "RK-1095b85c286fbd2a"
+}

@@ -1,0 +1,8 @@
+{
+  "scenario_id": "SC-010",
+  "attempt": 1,
+  "goal": "The auth-service is experiencing 504 gateway timeouts and high CPU usage under peak load. Check prior incident history for auth-service and search for similar latency symptoms across all services.",
+  "setup_messages": [],
+  "profile": "local",
+  "invoked": "scripts/local.mjs"
+}

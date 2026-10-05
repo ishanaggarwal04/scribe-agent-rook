@@ -1,0 +1,54 @@
+local_id: SC-008
+title: Widespread degradation on a Tier-1 service without money or data loss resolves to S2 severity
+feature_id: F-003
+feature_revision_id: sha256:25fd3061662ae226de180cb603db130c1ac6ccb782173d78b046919e7f31da26
+goal: >-
+  checkout-api is experiencing elevated latency and sporadic 504 gateway timeouts for roughly 30% of
+  active users. The service remains operational and no transaction data or customer payments are
+  lost.
+input_kind: text
+acceptance_criteria:
+  - statement: The agent looks up metadata for checkout-api and identifies it as a Tier 1 service.
+    check: llm_judge
+  - statement: >-
+      The assessment assigns S2 severity, matching the matrix rule for a Tier 1 service degraded for
+      many users.
+    check: llm_judge
+  - statement: >-
+      The assessment explicitly refrains from assigning S1 severity because the service is degraded
+      rather than unavailable and no money or data is lost.
+    check: llm_judge
+forbidden: []
+why: >-
+  Catches the agent over-escalating partial Tier-1 performance degradation to S1 when the service is
+  not unavailable and no financial/data loss occurred.
+confidence: high
+verification_requires: []
+attachments: []
+preconditions:
+  - 'ops-directory contains record for checkout-api with tier: 1'
+output_kind: text
+exercises:
+  tools:
+    - lookup_service
+  subagents: []
+  services: []
+calls:
+  - tool: lookup_service
+    expect: called
+multi_turn: false
+setup_messages: []
+max_turns: null
+repeat: 1
+timeout_seconds: null
+tags: []
+class: functional
+category: boundary
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources:
+  - README.md
+  - docs\incident-policy.pdf

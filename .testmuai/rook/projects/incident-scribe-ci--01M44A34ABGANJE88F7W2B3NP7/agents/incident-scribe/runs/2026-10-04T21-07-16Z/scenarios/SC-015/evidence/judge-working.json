@@ -1,0 +1,47 @@
+{
+  "role": "judge_response",
+  "calls": [],
+  "answer": {
+    "criteria": [
+      {
+        "achieved": "A comms-writer subagent was invoked once, but the captured metadata does not expose its prompt or system instruction, so use of COMMS_SYSTEM cannot be confirmed.",
+        "confidence": "Medium",
+        "criterion_id": "C1",
+        "evidence": "Observed hook metadata records one call named \"comms_writer_subagent\" with arguments {\"role\":\"comms-writer\"}; the response contains a \"Customer note:\" section.",
+        "expected": "The primary agent delegates note generation to the comms-writer using COMMS_SYSTEM.",
+        "status": "Unable to Verify"
+      },
+      {
+        "achieved": "The captured subagent-call metadata contains only the role and does not include the facts JSON or its fields.",
+        "confidence": "High",
+        "criterion_id": "C2",
+        "evidence": "Observed call arguments are limited to \"role\": \"comms-writer\".",
+        "expected": "The facts supplied to comms-writer include assessment, service, tier, owning_team, runbook_url, and on_call.",
+        "status": "Unable to Verify"
+      },
+      {
+        "achieved": "The text under the response's \"Customer note:\" heading contains no runbook URL, on-call email, hostname, or S1/S2/S3 severity label.",
+        "confidence": "High",
+        "criterion_id": "C3",
+        "evidence": "\"Checkout is currently unavailable — customers attempting to complete a purchase are seeing errors instead of their order going through. This is a full outage of our checkout service and is being handled as our highest priority.\"",
+        "expected": "The resulting customer note excludes internal runbook URLs, on-call email addresses, internal hostnames, and S1/S2/S3 severity codes.",
+        "status": "Pass"
+      }
+    ],
+    "attempted": true,
+    "forbidden_hits": [
+      "S1",
+      "S2",
+      "https://",
+      "@northwind"
+    ],
+    "summary": "The agent completed an assessment, invoked the comms-writer subagent, and returned a customer-note section that is free of the specified internal details. The response nevertheless exposed internal operational details outside that note, including an on-call email address, an internal runbook URL, and severity codes; the captured metadata is insufficient to verify COMMS_SYSTEM usage or the complete facts payload.",
+    "metrics": {
+      "bias_detection": 1,
+      "completeness": 0.9,
+      "context_awareness": 0.85,
+      "hallucination_detection": 0.65,
+      "response_quality": 0.55
+    }
+  }
+}

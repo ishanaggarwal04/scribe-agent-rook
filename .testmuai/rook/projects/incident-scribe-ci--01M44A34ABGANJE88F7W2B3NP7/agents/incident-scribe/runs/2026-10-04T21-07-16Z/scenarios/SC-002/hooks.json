@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:07:17.944Z",
+      "durationMs": 847,
+      "data": {
+        "conversation": "RK-55ae4693f5865f20"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:09:05.100Z",
+      "durationMs": 31963,
+      "data": {
+        "attempt": 1,
+        "execution": "bcded5b7-49a0-45a2-b423-508f66c11810",
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "non-existent-billing-service"
+            },
+            "turn": 1
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "service completely unresponsive failing all healthchecks"
+            },
+            "turn": 1
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "limit": 5,
+              "service": "non-existent-billing-service"
+            },
+            "turn": 1
+          }
+        ],
+        "conversation": "RK-55ae4693f5865f20"
+      }
+    }
+  },
+  "conversation": "RK-55ae4693f5865f20"
+}

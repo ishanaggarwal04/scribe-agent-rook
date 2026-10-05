@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T22:15:07.446Z",
+      "durationMs": 975,
+      "data": {
+        "conversation": "RK-4d611ab3741a1cb4"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T22:15:26.414Z",
+      "durationMs": 18965,
+      "data": {
+        "attempt": 1,
+        "execution": "22577aa9-8dcf-4ae8-9b5b-b74727ddc5bc",
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "checkout-api"
+            },
+            "turn": 1
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "checkout-api behaving oddly, degraded performance"
+            },
+            "turn": 1
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "limit": 5,
+              "service": "checkout-api"
+            },
+            "turn": 1
+          }
+        ],
+        "conversation": "RK-4d611ab3741a1cb4"
+      }
+    },
+    "collect": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T22:15:26.555Z",
+      "durationMs": 136,
+      "data": {
+        "conversation": "RK-4d611ab3741a1cb4",
+        "evidence_file": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\23b2a32ebfd8350a\\evidence-RK-4d611ab3741a1cb4.json",
+        "artifacts_written": [],
+        "images": [],
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "checkout-api"
+            }
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "checkout-api behaving oddly, degraded performance"
+            }
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "limit": 5,
+              "service": "checkout-api"
+            }
+          }
+        ],
+        "attempt": 1,
+        "execution": "22577aa9-8dcf-4ae8-9b5b-b74727ddc5bc"
+      }
+    }
+  },
+  "conversation": "RK-4d611ab3741a1cb4"
+}

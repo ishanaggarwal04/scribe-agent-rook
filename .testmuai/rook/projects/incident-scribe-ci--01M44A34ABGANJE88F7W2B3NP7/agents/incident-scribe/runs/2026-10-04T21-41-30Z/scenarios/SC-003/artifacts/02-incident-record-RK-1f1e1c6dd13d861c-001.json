@@ -1,0 +1,15 @@
+{
+  "session_id": "RK-1f1e1c6dd13d861c",
+  "service": "checkout-api",
+  "owning_team": "payments",
+  "tier": 1,
+  "severity": "S2",
+  "assessment": "STATUS: COMPLETE\nSEVERITY: S2\n\n- **Service:** checkout-api \u2014 tier 1, owned by **payments** (on-call: payments-oncall@northwind.example)\n- **Severity & matrix row:** S2 \u2014 \"a tier-1 or tier-2 service is degraded for many users.\" Checkout is erroring on all payment requests, which degrades a tier-1 service for every shopper, but the report shows failures (errors), not money or data loss, so it doesn't meet the S1 row.\n- **Has this happened before?** Yes, this pattern matches **INC-2098** (S2, 2026-08-02): elevated 5xx on the charge endpoint after a deploy shipped a connection-pool regression \u2014 resolved by rollback. A weaker match is **INC-2041** (S1, 2026-07-14): card authorisation timeouts caused by the payment provider's certificate rotation.\n\nSuggested next steps for the responders: check whether a deploy preceded the 10:00 UTC onset (as in INC-2098) and check payment provider status (as in INC-2041). Escalate to payments-oncall; if errors turn out to be silently dropping charges rather than failing them, this escalates to S1.",
+  "customer_note": "**Checkout service disruption**\n\nCheckout is currently erroring on all payment requests, which means shoppers cannot complete purchases. This started around 10:00 UTC and affects all customers; failed payments are returning an error, and we have no indication that any money or data has been lost. We're sorry for the disruption \u2014 our team is investigating whether a recent release caused the problem and is also checking with our payment provider. We'll share another update as soon as we know more.",
+  "tools_called": [
+    "lookup_service",
+    "search_incidents",
+    "recent_incidents",
+    "comms_writer_subagent"
+  ]
+}

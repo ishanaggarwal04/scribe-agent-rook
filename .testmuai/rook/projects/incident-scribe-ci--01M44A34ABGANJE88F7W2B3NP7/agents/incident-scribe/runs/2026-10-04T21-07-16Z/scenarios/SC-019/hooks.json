@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:14:34.223Z",
+      "durationMs": 700,
+      "data": {
+        "conversation": "RK-c164c0302da3e1cf"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:15:28.370Z",
+      "durationMs": 54141,
+      "data": {
+        "attempt": 1,
+        "execution": "bfe613df-2f5e-4d35-9a9e-b19464c6789e",
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "checkout-api"
+            },
+            "turn": 1
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "checkout unavailable HTTP 500 errors payments failing",
+              "service": "checkout-api"
+            },
+            "turn": 1
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "limit": 5,
+              "service": "checkout-api"
+            },
+            "turn": 1
+          },
+          {
+            "name": "comms_writer_subagent",
+            "arguments": {
+              "role": "comms-writer"
+            },
+            "turn": 1
+          }
+        ],
+        "conversation": "RK-c164c0302da3e1cf"
+      }
+    }
+  },
+  "conversation": "RK-c164c0302da3e1cf"
+}

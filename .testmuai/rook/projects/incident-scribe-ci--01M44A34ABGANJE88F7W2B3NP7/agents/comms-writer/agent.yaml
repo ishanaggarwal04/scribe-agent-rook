@@ -1,0 +1,54 @@
+local_id: comms-writer
+name: comms-writer
+parent: incident-scribe
+declared:
+  description: >-
+    A tool-less customer communications subagent that turns incident facts established by
+    incident-scribe into a short public status note.
+  name: comms-writer
+source:
+  kind: codebase
+  tracks:
+    - README.md
+    - docs/incident-policy.pdf
+    - docs/invoking.md
+    - incident_scribe/__main__.py
+    - incident_scribe/agent.py
+    - incident_scribe/mcp.py
+  subtree_digest: 57cb1243949f161dd083a57a0c1e55b2131a5021488b84376605099c33667290
+framework:
+  evidence: 'incident_scribe/agent.py: hand-authored COMMS_SYSTEM passed to the generic llm.call adapter'
+  name: custom
+interface:
+  accepts:
+    - >-
+      A structured JSON facts object containing assessment, service, tier, owning_team, runbook_url,
+      and on_call fields
+    - The facts are supplied by incident-scribe after its own service and incident lookups
+  entry: >-
+    incident_scribe/agent.py: llm.call([llm.system(COMMS_SYSTEM), llm.user(facts_json)],
+    max_output_tokens=1500)
+  intake: structured
+  out_of_scope:
+    - Looking up service metadata or incident history
+    - Calling tools or external services
+    - Performing the incident assessment itself
+  produces: >-
+    A three- or four-sentence customer-facing status note describing what is affected, how severe it
+    is in plain language, and what happens next.
+  transport: subagent
+limits: {}
+guardrails:
+  - Write only about facts supplied in the input facts object.
+  - Do not look up information or claim facts that were not provided.
+  - Use plain language and omit internal jargon and team names.
+  - Never include an internal URL, runbook link, or on-call email address.
+  - Do not include severity codes.
+  - Limit apologies to one clause and do not promise timing that was not provided.
+assumptions:
+  - >-
+    The concrete model provider behind llm.call is selected by the parent process and is not
+    specified for comms-writer itself.
+default_subagent: null
+calls: []
+approval_gates: []

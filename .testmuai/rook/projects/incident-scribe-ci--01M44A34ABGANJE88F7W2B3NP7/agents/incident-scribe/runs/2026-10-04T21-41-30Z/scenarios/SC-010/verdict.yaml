@@ -1,0 +1,99 @@
+scenario_id: SC-010
+run_id: 2026-10-04T21-41-30Z
+status: Pass
+criteria:
+  - criterion_id: C1
+    criterion: The agent calls lookup_service on ops-directory for auth-service.
+    expected: Call ops-directory lookup_service for auth-service.
+    achieved: The agent invoked ops-directory lookup_service once with name "auth-service".
+    status: Pass
+    evidence: >-
+      Observed tool call: lookup_service arguments {"name":"auth-service"}. The response also
+      states: "`auth-service` isn't in the Northwind ops directory".
+    confidence: High
+  - criterion_id: C2
+    criterion: >-
+      The agent invokes recent_incidents on ops-directory passing 'auth-service' as the service
+      parameter.
+    expected: Invoke ops-directory recent_incidents with auth-service as its service parameter.
+    achieved: The agent invoked recent_incidents once with service "auth-service".
+    status: Pass
+    evidence: >-
+      Observed tool call: recent_incidents arguments {"service":"auth-service"}. The response
+      states: "Prior history: zero incidents on record for `auth-service` itself".
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The agent invokes search_incidents on ops-directory with a symptom query related to timeouts
+      or CPU usage.
+    expected: Invoke ops-directory search_incidents with a symptom query related to timeouts or CPU usage.
+    achieved: The agent invoked search_incidents with a query containing both timeout and CPU symptoms.
+    status: Pass
+    evidence: >-
+      Observed tool call: search_incidents arguments {"query":"504 gateway timeouts high CPU under
+      peak load"}. The response refers to a "Cross-service search" for that same query.
+    confidence: High
+  - criterion_id: C4
+    criterion: The assessment incorporates historical incident context or findings returned by ops-directory.
+    expected: >-
+      Incorporate historical incident context or findings returned by ops-directory into the
+      assessment.
+    achieved: >-
+      The assessment incorporates the returned cross-service historical findings, including incident
+      IDs, services, severity levels, symptoms, and the closest precedents.
+    status: Pass
+    evidence: >-
+      The response says: "found three similar-looking past incidents" and identifies "INC-2041",
+      "INC-2098", and "INC-1877"; it concludes: "The closest precedents are the checkout-api
+      timeout/5xx-under-load incidents."
+    confidence: High
+  - criterion_id: CALL-01
+    criterion: ops-directory.lookup_service was called
+    expected: called
+    achieved: called, from the hook and trace
+    status: Pass
+    evidence: >-
+      lookup_service is in the record rook holds for this scenario, reported by the hook and trace
+      (matched on the tool name alone — an observed call carries no server, so ops-directory did not
+      narrow this, #971)
+    confidence: High
+  - criterion_id: CALL-02
+    criterion: ops-directory.recent_incidents was called
+    expected: called
+    achieved: called, from the hook and trace
+    status: Pass
+    evidence: >-
+      recent_incidents is in the record rook holds for this scenario, reported by the hook and trace
+      (matched on the tool name alone — an observed call carries no server, so ops-directory did not
+      narrow this, #971)
+    confidence: High
+  - criterion_id: CALL-03
+    criterion: ops-directory.search_incidents was called
+    expected: called
+    achieved: called, from the hook and trace
+    status: Pass
+    evidence: >-
+      search_incidents is in the record rook holds for this scenario, reported by the hook and trace
+      (matched on the tool name alone — an observed call carries no server, so ops-directory did not
+      narrow this, #971)
+    confidence: High
+pass_count: 7
+fail_count: 0
+unable_to_verify_count: 0
+compliance_percentage: 100
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 1
+  response_quality: 0.95
+latency_ms: 29272
+turns: 1
+usage:
+  input_tokens: 1571
+  output_tokens: 1009
+summary: >-
+  The agent made the required lookup, service-history, and symptom-search calls, as confirmed by
+  rook's recorded tool calls. It accurately incorporated the resulting prior-incident context while
+  requesting clarification because auth-service was not registered.

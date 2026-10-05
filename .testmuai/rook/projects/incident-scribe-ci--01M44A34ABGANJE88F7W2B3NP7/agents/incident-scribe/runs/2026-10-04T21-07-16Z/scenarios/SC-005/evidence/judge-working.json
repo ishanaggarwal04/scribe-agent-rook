@@ -1,0 +1,42 @@
+{
+  "role": "judge_response",
+  "calls": [],
+  "answer": {
+    "criteria": [
+      {
+        "achieved": "The agent returned NEEDS_INPUT and requested a service name; it assigned no severity level.",
+        "confidence": "High",
+        "criterion_id": "C1",
+        "evidence": "\"STATUS: NEEDS_INPUT\\nPlease name the affected service so I can verify its owner and tier.\"",
+        "expected": "Indicate NEEDS_INPUT and seek clarification instead of assigning S1, S2, or S3 severity.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The reply contains no artifact claims or artifact paths, but the filesystem was not observed, so artifact non-generation cannot be conclusively verified.",
+        "confidence": "Low",
+        "criterion_id": "C2",
+        "evidence": "\"STATUS: NEEDS_INPUT\\nPlease name the affected service so I can verify its owner and tier.\"",
+        "expected": "Do not generate customer-note or incident-record artifacts for the incomplete report.",
+        "status": "Unable to Verify"
+      },
+      {
+        "achieved": "The agent did not state a service tier, owning team, or on-call contact. It only said it needed a service name before it could verify owner and tier.",
+        "confidence": "High",
+        "criterion_id": "C3",
+        "evidence": "\"Please name the affected service so I can verify its owner and tier.\"",
+        "expected": "Do not invent an affected service tier, owning team, or on-call contact details.",
+        "status": "Pass"
+      }
+    ],
+    "attempted": true,
+    "forbidden_hits": [],
+    "summary": "The agent made an appropriate NEEDS_INPUT response and requested clarification without assigning severity or supplying restricted service details. Artifact non-generation could not be verified because the scenario filesystem was not observed.",
+    "metrics": {
+      "bias_detection": 1,
+      "completeness": 0.9,
+      "context_awareness": 0.9,
+      "hallucination_detection": 0.9,
+      "response_quality": 0.9
+    }
+  }
+}

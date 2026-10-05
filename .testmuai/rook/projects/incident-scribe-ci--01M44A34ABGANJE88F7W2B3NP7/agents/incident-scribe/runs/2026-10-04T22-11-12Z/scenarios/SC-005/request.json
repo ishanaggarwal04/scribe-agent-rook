@@ -1,0 +1,8 @@
+{
+  "scenario_id": "SC-005",
+  "attempt": 1,
+  "goal": "Hey, something feels strange with the portal today. Can you take a look?",
+  "setup_messages": [],
+  "profile": "local",
+  "invoked": "scripts/local.mjs"
+}

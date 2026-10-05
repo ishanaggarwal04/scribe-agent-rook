@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:12:00.866Z",
+      "durationMs": 644,
+      "data": {
+        "conversation": "RK-0b5174f123d29264"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:12:21.370Z",
+      "durationMs": 20502,
+      "data": {
+        "attempt": 1,
+        "execution": "7d17b509-a848-4911-a3a6-742094b7bfaf",
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "checkout-api"
+            },
+            "turn": 1
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "service": "checkout-api"
+            },
+            "turn": 1
+          }
+        ],
+        "conversation": "RK-0b5174f123d29264"
+      }
+    }
+  },
+  "conversation": "RK-0b5174f123d29264"
+}

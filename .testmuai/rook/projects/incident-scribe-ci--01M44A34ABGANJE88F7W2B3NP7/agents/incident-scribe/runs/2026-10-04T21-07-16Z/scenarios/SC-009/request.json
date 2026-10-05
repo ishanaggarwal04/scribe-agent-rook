@@ -1,0 +1,8 @@
+{
+  "scenario_id": "SC-009",
+  "attempt": 1,
+  "goal": "checkout-api is completely down and failing all payment processing requests. Customers are unable to complete orders.",
+  "setup_messages": [],
+  "profile": "local",
+  "invoked": "scripts/local.mjs"
+}

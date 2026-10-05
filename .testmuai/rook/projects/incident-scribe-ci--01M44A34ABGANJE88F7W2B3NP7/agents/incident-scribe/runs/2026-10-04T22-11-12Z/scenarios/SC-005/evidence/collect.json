@@ -1,0 +1,29 @@
+{
+  "conversation": "RK-08057f64d1bcb8a2",
+  "evidence_file": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\98ed41d38ceca50b\\evidence-RK-08057f64d1bcb8a2.json",
+  "artifacts_written": [],
+  "images": [],
+  "calls": [
+    {
+      "name": "lookup_service",
+      "arguments": {
+        "name": "portal"
+      }
+    },
+    {
+      "name": "recent_incidents",
+      "arguments": {
+        "service": "portal"
+      }
+    },
+    {
+      "name": "search_incidents",
+      "arguments": {
+        "limit": 5,
+        "query": "portal behaving strangely"
+      }
+    }
+  ],
+  "attempt": 1,
+  "execution": "c9b007b7-c26b-4f61-8ebc-1596a6b36ae5"
+}

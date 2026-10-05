@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:14:14.018Z",
+      "durationMs": 849,
+      "data": {
+        "conversation": "RK-9e08f281b2ccb235"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:14:41.213Z",
+      "durationMs": 27174,
+      "data": {
+        "attempt": 1,
+        "execution": "f964501a-de9e-455e-a700-5c201b16cd34",
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "auth-service"
+            },
+            "turn": 1
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "high failure rate in user logins"
+            },
+            "turn": 1
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "limit": 5,
+              "service": "auth-service"
+            },
+            "turn": 1
+          }
+        ],
+        "conversation": "RK-9e08f281b2ccb235"
+      }
+    }
+  },
+  "conversation": "RK-9e08f281b2ccb235"
+}

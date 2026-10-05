@@ -1,0 +1,10 @@
+# Written by rook.
+#
+# Evidence is meant to be committed: a run is self-contained and a reviewer
+# should be able to read it. These are the exceptions — transcripts, anything
+# holding a credential, and anything that is true of THIS MACHINE only.
+*.log
+.env
+cache/
+projects/*/jobs/
+projects/*/agents/*/state.json

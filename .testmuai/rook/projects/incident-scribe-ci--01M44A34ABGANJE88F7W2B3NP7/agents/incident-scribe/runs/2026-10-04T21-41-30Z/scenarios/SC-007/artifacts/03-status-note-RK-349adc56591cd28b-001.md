@@ -1,0 +1,3 @@
+**Search indexing outage**
+
+Search indexing is currently down — every indexing job across the search cluster is failing, so new content will not show up in search results until this is resolved. This is a new kind of failure for us; past problems only caused slower or outdated search results, never a complete stop. Engineers are investigating, including checking whether a recent update or reindexing task triggered it. We'll share updates as we learn more.

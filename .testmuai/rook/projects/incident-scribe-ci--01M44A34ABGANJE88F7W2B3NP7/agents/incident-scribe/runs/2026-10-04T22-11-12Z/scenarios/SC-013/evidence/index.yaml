@@ -1,0 +1,4 @@
+files:
+  - read: >-
+      .testmuai\rook\projects\incident-scribe-ci--01M44A34ABGANJE88F7W2B3NP7\agents\incident-scribe\runs\2026-10-04T22-11-12Z\scenarios\SC-013\response.json
+    stored_as: 1-response.json

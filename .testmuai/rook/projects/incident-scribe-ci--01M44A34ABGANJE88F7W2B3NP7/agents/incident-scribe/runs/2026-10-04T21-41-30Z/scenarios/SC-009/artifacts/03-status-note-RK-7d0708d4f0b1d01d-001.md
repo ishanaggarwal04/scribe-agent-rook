@@ -1,0 +1,3 @@
+**Checkout payments unavailable**
+
+Checkout payment processing is currently down, and all payment attempts are failing — customers are unable to complete purchases at this time. This is a complete outage rather than a partial slowdown, so no payments are going through right now. The team responsible for the service has been engaged and is actively working to restore payment processing. We're sorry for the disruption, and we'll share updates as we learn more.

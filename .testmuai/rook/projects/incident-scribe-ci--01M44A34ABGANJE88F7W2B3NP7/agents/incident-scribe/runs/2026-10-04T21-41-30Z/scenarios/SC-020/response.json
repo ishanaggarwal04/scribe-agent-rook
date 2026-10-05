@@ -1,0 +1,37 @@
+{
+  "scenario_id": "SC-020",
+  "attempt": 1,
+  "status": "completed",
+  "output": "STATUS: NEEDS_INPUT\n\nCan you identify the service from the source of the report — e.g., the alert or monitor that fired, a hostname, or the team that noticed it? Without a service name or a specific symptom (endpoint, operation, or error), I can't look up ownership or judge whether this has happened before, and I won't guess a severity.",
+  "raw_response": "{\"agent_reply\":\"STATUS: NEEDS_INPUT\\n\\nCan you identify the service from the source of the report — e.g., the alert or monitor that fired, a hostname, or the team that noticed it? Without a service name or a specific symptom (endpoint, operation, or error), I can't look up ownership or judge whether this has happened before, and I won't guess a severity.\",\"conversation\":\"RK-83141e89db55be8d\",\"calls\":[],\"usage\":{\"input\":429,\"output\":582},\"evidence\":{\"ok\":true,\"status\":\"needs_input\",\"answer\":\"STATUS: NEEDS_INPUT\\n\\nCan you identify the service from the source of the report — e.g., the alert or monitor that fired, a hostname, or the team that noticed it? Without a service name or a specific symptom (endpoint, operation, or error), I can't look up ownership or judge whether this has happened before, and I won't guess a severity.\",\"assessment\":\"STATUS: NEEDS_INPUT\\n\\nCan you identify the service from the source of the report — e.g., the alert or monitor that fired, a hostname, or the team that noticed it? Without a service name or a specific symptom (endpoint, operation, or error), I can't look up ownership or judge whether this has happened before, and I won't guess a severity.\",\"customer_note\":null,\"note_file\":null,\"incident_record_file\":null,\"status_board_image\":null,\"severity_matrix_image\":null,\"calls\":[],\"usage\":{\"input\":429,\"output\":582},\"metrics\":{\"status\":\"needs_input\",\"latency_ms\":17253,\"model_calls\":1,\"tool_calls\":0,\"input_tokens\":429,\"output_tokens\":582},\"service\":null,\"owning_team\":null,\"tier\":null,\"severity\":null}}",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "We are seeing some minor latency issues on a service, but I am not sure which service it is or what exact errors are occurring."
+    },
+    {
+      "role": "agent",
+      "content": "STATUS: NEEDS_INPUT\n\nWhich service is affected (service name), and can you describe the specific symptom — e.g., elevated p99 latency on which endpoint or operation?"
+    },
+    {
+      "role": "user",
+      "content": "I don’t know the service name or the exact errors yet. I only know that we’re seeing minor latency issues, but I don’t have an affected endpoint or operation to identify."
+    },
+    {
+      "role": "agent",
+      "content": "STATUS: NEEDS_INPUT\n\nCan you identify the service from the source of the report — e.g., the alert or monitor that fired, a hostname, or the team that noticed it? Without a service name or a specific symptom (endpoint, operation, or error), I can't look up ownership or judge whether this has happened before, and I won't guess a severity."
+    }
+  ],
+  "artifacts": [
+    ".testmuai\\rook\\projects\\incident-scribe-ci--01M44A34ABGANJE88F7W2B3NP7\\agents\\incident-scribe\\runs\\2026-10-04T21-41-30Z\\scenarios\\SC-020\\artifacts\\01-evidence-RK-83141e89db55be8d.json"
+  ],
+  "latency_ms": 31166,
+  "turns": 2,
+  "usage": {
+    "input_tokens": 429,
+    "output_tokens": 582
+  },
+  "clarifications": 1,
+  "fs_note": "the filesystem was not observed for this scenario, so nothing can be concluded from the absence of changes",
+  "execution": "b7327346-cb87-4370-99e8-d2a663f30e3d"
+}

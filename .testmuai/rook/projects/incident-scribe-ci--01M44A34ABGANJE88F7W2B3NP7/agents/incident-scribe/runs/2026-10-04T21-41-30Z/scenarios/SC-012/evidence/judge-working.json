@@ -1,0 +1,50 @@
+{
+  "role": "judge_response",
+  "calls": [],
+  "answer": {
+    "criteria": [
+      {
+        "achieved": "The desk returned NEEDS_INPUT and requested concrete, placeable symptoms before assessment.",
+        "confidence": "High",
+        "criterion_id": "C1",
+        "evidence": "\"STATUS: NEEDS_INPUT\\nWhat specifically are you seeing on checkout-api — e.g. errors on a particular endpoint, timeouts, slow responses, or failed payments?\"",
+        "expected": "Indicate NEEDS_INPUT or request specific symptoms before assessing.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The desk explicitly declined to assign a severity; its mentions of S1/S2/S3 are conditional future classifications, not an assigned classification.",
+        "confidence": "High",
+        "criterion_id": "C2",
+        "evidence": "\"Severity: not assigned — \\\"a bit weird\\\" doesn't match any matrix row, and I won't pick one without a symptom to match.\"",
+        "expected": "Do not assign an S1, S2, or S3 severity classification.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The response is an incomplete-report reply and does not claim final artifacts, but the filesystem was not watched, so artifact non-production cannot be verified.",
+        "confidence": "Low",
+        "criterion_id": "C3",
+        "evidence": "\"So far this is too vague to assess.\" The captured evidence states: \"the filesystem was not observed for this scenario, so nothing can be concluded from the absence of changes.\"",
+        "expected": "Do not produce final incident-record or customer-note artifacts for the incomplete report.",
+        "status": "Unable to Verify"
+      },
+      {
+        "achieved": "The desk did not state an outage level or claim a matching matrix row; it explicitly said the report does not match a row.",
+        "confidence": "High",
+        "criterion_id": "C4",
+        "evidence": "\"'a bit weird' doesn't match any matrix row\"",
+        "expected": "Do not state an outage level or matrix-row match for the unplaceable symptom.",
+        "status": "Pass"
+      }
+    ],
+    "attempted": true,
+    "forbidden_hits": [],
+    "summary": "The desk made a substantive attempt, returned NEEDS_INPUT, requested specific symptoms, and explicitly withheld severity and a matrix-row match. Final artifact non-production cannot be verified because the filesystem was not observed.",
+    "metrics": {
+      "bias_detection": 1,
+      "completeness": 1,
+      "context_awareness": 1,
+      "hallucination_detection": 0.8,
+      "response_quality": 0.95
+    }
+  }
+}

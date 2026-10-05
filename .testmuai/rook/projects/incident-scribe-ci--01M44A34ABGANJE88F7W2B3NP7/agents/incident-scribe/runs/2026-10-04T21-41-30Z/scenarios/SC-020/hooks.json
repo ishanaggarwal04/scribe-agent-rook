@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T21:59:25.277Z",
+      "durationMs": 902,
+      "data": {
+        "conversation": "RK-83141e89db55be8d"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T22:00:00.512Z",
+      "durationMs": 18389,
+      "data": {
+        "attempt": 1,
+        "execution": "b7327346-cb87-4370-99e8-d2a663f30e3d",
+        "calls": [],
+        "conversation": "RK-83141e89db55be8d"
+      }
+    },
+    "collect": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-04T22:00:00.647Z",
+      "durationMs": 127,
+      "data": {
+        "conversation": "RK-83141e89db55be8d",
+        "evidence_file": "C:\\Users\\ISHANA~1\\AppData\\Local\\Temp\\rook-scribe\\e1507450a599ccce\\evidence-RK-83141e89db55be8d.json",
+        "artifacts_written": [],
+        "images": [],
+        "calls": [],
+        "attempt": 1,
+        "execution": "b7327346-cb87-4370-99e8-d2a663f30e3d"
+      }
+    }
+  },
+  "conversation": "RK-83141e89db55be8d"
+}

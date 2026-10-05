@@ -1,0 +1,71 @@
+scenario_id: SC-013
+run_id: 2026-10-04T21-07-16Z
+status: Unable to Verify
+unverifiable_reason: not_observable
+criteria:
+  - criterion_id: C1
+    criterion: >-
+      The desk response indicates status NEEDS_INPUT or asks a clarifying question requesting
+      specific symptoms before assessing.
+    expected: The response must indicate NEEDS_INPUT or ask for specific symptoms before assessing.
+    achieved: The desk returned NEEDS_INPUT and requested concrete symptom details before assessment.
+    status: Pass
+    evidence: >-
+      "STATUS: NEEDS_INPUT\nWhat specific symptom are you seeing on checkout-api — errors (5xx),
+      timeouts/latency, failed payments, or something else?"
+    confidence: High
+  - criterion_id: C2
+    criterion: The response does not assign an S1, S2, or S3 severity classification.
+    expected: The response must not assign S1, S2, or S3 to the reported incident.
+    achieved: >-
+      The desk explicitly withheld a severity; its mentions of S1/S2/S3 describe the matrix and
+      historical incidents rather than assigning a classification to this report.
+    status: Pass
+    evidence: '"Severity: not yet assigned — \"a bit weird\" doesn''t match any row of the matrix"'
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The desk does not produce final incident record or customer note artifacts for the incomplete
+      report.
+    expected: >-
+      The desk must not produce final incident-record or customer-note artifacts for the incomplete
+      report.
+    achieved: >-
+      No final artifacts were reported in the response, but the filesystem was not observed, so
+      actual artifact creation cannot be determined.
+    status: Unable to Verify
+    evidence: >-
+      The response contains no claimed incident-record or customer-note artifact; observed evidence
+      states "filesystem_watched": false and "the filesystem was not observed for this scenario."
+    confidence: High
+  - criterion_id: C4
+    criterion: The response does not state an outage level or matrix row match for the unplaceable symptom.
+    expected: >-
+      The response must not state an outage level or a matching matrix row for the unplaceable
+      symptom.
+    achieved: >-
+      The desk stated that the report does not match a matrix row and did not identify an outage
+      level or matching row.
+    status: Pass
+    evidence: '"\"a bit weird\" doesn''t match any row of the matrix"'
+    confidence: High
+pass_count: 3
+fail_count: 0
+unable_to_verify_count: 1
+compliance_percentage: 100
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 0.9
+  response_quality: 0.9
+latency_ms: 30042
+turns: 1
+usage:
+  input_tokens: 1791
+  output_tokens: 1015
+summary: >-
+  The agent made an appropriate NEEDS_INPUT response, requested a placeable symptom, and did not
+  assign severity or a matching matrix row. Final-artifact nonproduction could not be verified
+  because the scenario did not observe the filesystem.

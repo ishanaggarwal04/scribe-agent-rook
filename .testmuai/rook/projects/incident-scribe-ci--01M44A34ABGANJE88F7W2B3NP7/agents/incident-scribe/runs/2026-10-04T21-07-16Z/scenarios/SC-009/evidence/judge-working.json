@@ -1,0 +1,42 @@
+{
+  "role": "judge_response",
+  "calls": [],
+  "answer": {
+    "criteria": [
+      {
+        "achieved": "The agent assigned S1 and tied the classification to the stated Northwind matrix rule.",
+        "confidence": "High",
+        "criterion_id": "C1",
+        "evidence": "“SEVERITY: S1 — matches the matrix row ‘a tier-1 service is unavailable, or money or data is being lost’”",
+        "expected": "The completed assessment assigns S1 severity using the Northwind severity matrix.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The assessment explicitly quotes the applicable matrix criterion and explains that checkout-api is fully unavailable.",
+        "confidence": "High",
+        "criterion_id": "C2",
+        "evidence": "“matches the matrix row ‘a tier-1 service is unavailable, or money or data is being lost’ (tier-1 service fully unavailable).”",
+        "expected": "The assessment explicitly references the matching criterion: a tier-1 service is unavailable or money/data is being lost.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The agent made one observed lookup_service call for checkout-api before completing its assessment.",
+        "confidence": "High",
+        "criterion_id": "C3",
+        "evidence": "Observed tool-call record: “name”: “lookup_service”, “times”: 1, “arguments”: {“name”: “checkout-api”}. The response then states: “checkout-api — tier 1”.",
+        "expected": "The agent queries ops-directory via lookup_service for checkout-api to verify its tier before completing the assessment.",
+        "status": "Pass"
+      }
+    ],
+    "attempted": true,
+    "forbidden_hits": [],
+    "summary": "The agent completed an S1 assessment for the checkout-api outage, explicitly identified the relevant Northwind matrix row, and rook observed the required checkout-api lookup_service call. All acceptance criteria passed.",
+    "metrics": {
+      "bias_detection": 1,
+      "completeness": 1,
+      "context_awareness": 1,
+      "hallucination_detection": 1,
+      "response_quality": 1
+    }
+  }
+}

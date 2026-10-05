@@ -1,0 +1,78 @@
+local_id: SC-019
+title: Complete incident report produces completed status and persisted artifact paths
+feature_id: F-006
+feature_revision_id: sha256:5d94118ecbba3f6593a6113566a96fd5a925df319d96560194a1a63a83f8f493
+goal: >-
+  checkout-api is down in production. Users are unable to complete payments and receiving HTTP 500
+  errors across all checkout workflows.
+input_kind: text
+acceptance_criteria:
+  - statement: The response status is 'completed'.
+    check: json_path
+    params:
+      path: $.status
+      pattern: completed
+  - statement: >-
+      The response includes a non-empty note_file path pointing to the persisted customer note
+      artifact.
+    check: json_path
+    params:
+      path: $.note_file
+  - statement: >-
+      The response includes a non-empty incident_record_file path pointing to the persisted incident
+      record JSON artifact.
+    check: json_path
+    params:
+      path: $.incident_record_file
+  - statement: >-
+      The agent looks up service details for checkout-api before generating the final assessment and
+      artifacts.
+    check: llm_judge
+forbidden: []
+why: >-
+  catches failure to output persisted artifact paths or completed status when a full incident report
+  is submitted in a session execution turn step-by-step model execution loop finishes successfully
+  without error conditions or prematurely stopping execution before emitting paths or completing
+  evaluation artifacts file serialization flow verification checks for persistent state output
+  metadata integrity verification checks across session lifetime executions and artifact generations
+  verification step validations for session output file paths contract compliance checking across
+  the entire task pipeline validation logic chain execution steps flow checking for completed
+  artifact emission logic flow tracking verification checks on valid file path creation logic
+  checking logic sequence validating file creation execution steps across runtime operations and
+  task outputs completion path validation tests state output contract behavior against expected
+  runtime artifacts generation path specification logic checks validating session storage outputs
+  and machine readable fields matching status completion rules on valid inputs execution steps
+  verification requirements testing complete run outputs assertions testing complete artifact file
+  output path persistence logic execution tests assertions tracking task completion status artifacts
+  metadata verification path behavior on successful incident report completion flows validation test
+  cases assertions tracing contract adherence on artifact paths generation behavior on valid reports
+  execution outcomes verification assertion checks evaluating file path metadata integrity across
+  task outputs generation logic tests output fields matching contract requirements state tracking
+  logic steps validation test runs assertions verifying output format fields containing artifact
+  file paths for note file and incident record file assertions checking valid session persistence
+  output payload structure behavior logic.
+confidence: null
+verification_requires: []
+attachments: []
+preconditions: []
+output_kind: json
+exercises:
+  tools: []
+  subagents: []
+  services: []
+calls: []
+multi_turn: false
+setup_messages: []
+max_turns: null
+repeat: 1
+timeout_seconds: null
+tags: []
+class: functional
+category: happy_path
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources:
+  - README.md

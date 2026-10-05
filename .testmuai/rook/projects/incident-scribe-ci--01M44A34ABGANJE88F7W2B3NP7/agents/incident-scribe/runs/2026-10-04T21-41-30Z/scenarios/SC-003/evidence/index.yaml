@@ -1,0 +1,10 @@
+files:
+  - read: >-
+      .testmuai\rook\projects\incident-scribe-ci--01M44A34ABGANJE88F7W2B3NP7\agents\incident-scribe\runs\2026-10-04T21-41-30Z\scenarios\SC-003\artifacts\01-evidence-RK-1f1e1c6dd13d861c.json
+    stored_as: 1-01-evidence-RK-1f1e1c6dd13d861c.json
+  - read: >-
+      .testmuai\rook\projects\incident-scribe-ci--01M44A34ABGANJE88F7W2B3NP7\agents\incident-scribe\runs\2026-10-04T21-41-30Z\scenarios\SC-003\response.json
+    stored_as: 2-response.json
+  - read: >-
+      .testmuai\rook\projects\incident-scribe-ci--01M44A34ABGANJE88F7W2B3NP7\agents\incident-scribe\runs\2026-10-04T21-41-30Z\scenarios\SC-003\hooks.json
+    stored_as: 3-hooks.json

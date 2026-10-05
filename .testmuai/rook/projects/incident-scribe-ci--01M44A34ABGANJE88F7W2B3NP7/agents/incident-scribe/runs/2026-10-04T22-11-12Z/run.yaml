@@ -1,0 +1,108 @@
+version: 1
+id: 2026-10-04T22-11-12Z
+name: ondisk-check
+agent_id: incident-scribe
+created: '2026-10-04T22:11:12.963Z'
+test_mode: false
+concurrency: 1
+pins:
+  agent_version_id: 01M44BVJ3REZH9K9TFPR9CSZSM
+  profile_id: local
+  profile_revision: sha256:82da9c004b7a2e031e9d46e013e20a4af304503552765ed2b6864044ffceacab
+  tree_hash: sha256:3b78764873dbc046586e4a9f148088bbd3bbd867fef12b4b6f2d30186ef3e1f8
+included:
+  - scenario_id: SC-001
+    why: a candidate, and nothing narrowed this run further
+    confidence: high
+  - scenario_id: SC-005
+    why: a candidate, and nothing narrowed this run further
+    confidence: high
+  - scenario_id: SC-012
+    why: a candidate, and nothing narrowed this run further
+    confidence: high
+  - scenario_id: SC-013
+    why: a candidate, and nothing narrowed this run further
+    confidence: high
+  - scenario_id: SC-020
+    why: a candidate, and nothing narrowed this run further
+    confidence: high
+skipped:
+  - scenario_id: SC-002
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-003
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-004
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-006
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-007
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-008
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-009
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-010
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-011
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-014
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-015
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-016
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-017
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-018
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+  - scenario_id: SC-019
+    why: 'excluded by the flags: not named by --only'
+    confidence: high
+judge_only: []
+carried: []
+rca: false
+unrunnable: []
+gapped:
+  - scenario_id: SC-002
+    why: 'a verification requirement names no MCP operation: {"type":"mcp","server":"ops-directory"}'
+    unmet:
+      - kind: unknown
+        why: 'a verification requirement names no MCP operation: {"type":"mcp","server":"ops-directory"}'
+  - scenario_id: SC-003
+    why: 'a verification requirement names no MCP operation: {"type":"mcp","server":"ops-directory"}'
+    unmet:
+      - kind: unknown
+        why: 'a verification requirement names no MCP operation: {"type":"mcp","server":"ops-directory"}'
+stale: []
+summary: no instruction given — 5 to execute. Every candidate the flags and the tree left.
+resume_from: null
+phases_run:
+  - prepare
+  - open
+  - execute
+  - close
+  - collect
+  - judge
+upstream:
+  run_id: 01M44FH75YF23JB5M21ND8XPYB
+  scenario_ids:
+    SC-001#1: 01M44FH762WEW85AHC4TASRRCX
+    SC-005#1: 01M44FH764D7YMB6BPBXDX6CNV
+    SC-012#1: 01M44FH765YG2QGJEP9X0YAPPZ
+    SC-013#1: 01M44FH766JPDQ5TDJAAM943XN
+    SC-020#1: 01M44FH767J3C34A209DS55T6Q
+  ended: true

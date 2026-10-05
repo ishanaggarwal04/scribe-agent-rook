@@ -1,0 +1,62 @@
+scenario_id: SC-009
+run_id: 2026-10-04T21-41-30Z
+status: Pass
+criteria:
+  - criterion_id: C1
+    criterion: The assessment identifies the incident severity as S1 based on the Northwind severity matrix.
+    expected: The completed assessment assigns S1 severity using the Northwind severity matrix.
+    achieved: The agent assigned S1 and tied it to the Northwind matrix’s tier-1-unavailable condition.
+    status: Pass
+    evidence: '“Severity: S1 — matching matrix row: a tier-1 service is unavailable.”'
+    confidence: High
+  - criterion_id: C2
+    criterion: >-
+      The assessment explicitly references the matching matrix criteria (tier-1 service unavailable
+      or money/data being lost).
+    expected: >-
+      The assessment explicitly references the applicable matrix criteria: a tier-1 service being
+      unavailable or money/data being lost.
+    achieved: >-
+      The assessment explicitly names the matching tier-1-service-unavailable criterion and explains
+      that checkout-api is fully unavailable.
+    status: Pass
+    evidence: >-
+      “matching matrix row: a tier-1 service is unavailable. The report states the service is
+      completely down and failing all payment processing requests, which is a full outage of a
+      tier-1 service”
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The agent queries ops-directory using lookup_service for checkout-api to verify its tier
+      before completing the assessment.
+    expected: >-
+      The agent queries ops-directory through lookup_service for checkout-api to verify its tier
+      before completing the assessment.
+    achieved: >-
+      Rook observed one lookup_service call for checkout-api during turn 1, before the assessment
+      was returned.
+    status: Pass
+    evidence: >-
+      Observed tool call: “lookup_service” with arguments “name”: “checkout-api” (times: 1, turns:
+      [1]).
+    confidence: High
+pass_count: 3
+fail_count: 0
+unable_to_verify_count: 0
+compliance_percentage: 100
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 1
+  response_quality: 1
+latency_ms: 52593
+turns: 1
+usage:
+  input_tokens: 2473
+  output_tokens: 1899
+summary: >-
+  The agent completed the incident assessment, assigned S1 using the stated tier-1 outage matrix
+  row, and provided an appropriate customer note. Rook’s observed tool trace confirms lookup_service
+  was called for checkout-api.

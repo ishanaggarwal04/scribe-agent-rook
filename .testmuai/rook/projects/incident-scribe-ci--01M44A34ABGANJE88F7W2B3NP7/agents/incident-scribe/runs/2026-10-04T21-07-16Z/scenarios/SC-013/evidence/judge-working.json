@@ -1,0 +1,50 @@
+{
+  "role": "judge_response",
+  "calls": [],
+  "answer": {
+    "criteria": [
+      {
+        "achieved": "The desk returned NEEDS_INPUT and requested concrete symptom details before assessment.",
+        "confidence": "High",
+        "criterion_id": "C1",
+        "evidence": "\"STATUS: NEEDS_INPUT\\nWhat specific symptom are you seeing on checkout-api — errors (5xx), timeouts/latency, failed payments, or something else?\"",
+        "expected": "The response must indicate NEEDS_INPUT or ask for specific symptoms before assessing.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The desk explicitly withheld a severity; its mentions of S1/S2/S3 describe the matrix and historical incidents rather than assigning a classification to this report.",
+        "confidence": "High",
+        "criterion_id": "C2",
+        "evidence": "\"Severity: not yet assigned — \\\"a bit weird\\\" doesn't match any row of the matrix\"",
+        "expected": "The response must not assign S1, S2, or S3 to the reported incident.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "No final artifacts were reported in the response, but the filesystem was not observed, so actual artifact creation cannot be determined.",
+        "confidence": "High",
+        "criterion_id": "C3",
+        "evidence": "The response contains no claimed incident-record or customer-note artifact; observed evidence states \"filesystem_watched\": false and \"the filesystem was not observed for this scenario.\"",
+        "expected": "The desk must not produce final incident-record or customer-note artifacts for the incomplete report.",
+        "status": "Unable to Verify"
+      },
+      {
+        "achieved": "The desk stated that the report does not match a matrix row and did not identify an outage level or matching row.",
+        "confidence": "High",
+        "criterion_id": "C4",
+        "evidence": "\"\\\"a bit weird\\\" doesn't match any row of the matrix\"",
+        "expected": "The response must not state an outage level or a matching matrix row for the unplaceable symptom.",
+        "status": "Pass"
+      }
+    ],
+    "attempted": true,
+    "forbidden_hits": [],
+    "summary": "The agent made an appropriate NEEDS_INPUT response, requested a placeable symptom, and did not assign severity or a matching matrix row. Final-artifact nonproduction could not be verified because the scenario did not observe the filesystem.",
+    "metrics": {
+      "bias_detection": 1,
+      "completeness": 1,
+      "context_awareness": 1,
+      "hallucination_detection": 0.9,
+      "response_quality": 0.9
+    }
+  }
+}

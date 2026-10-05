@@ -1,0 +1,7 @@
+files:
+  - read: >-
+      .testmuai\rook\projects\incident-scribe-ci--01M44A34ABGANJE88F7W2B3NP7\agents\incident-scribe\runs\2026-10-04T21-41-30Z\scenarios\SC-007\artifacts\01-evidence-RK-349adc56591cd28b.json
+    stored_as: 1-01-evidence-RK-349adc56591cd28b.json
+  - read: >-
+      .testmuai\rook\projects\incident-scribe-ci--01M44A34ABGANJE88F7W2B3NP7\agents\incident-scribe\runs\2026-10-04T21-41-30Z\scenarios\SC-007\artifacts\02-incident-record-RK-349adc56591cd28b-001.json
+    stored_as: 2-02-incident-record-RK-349adc56591cd28b-001.json

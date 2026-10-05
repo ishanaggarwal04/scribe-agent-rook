@@ -1,0 +1,82 @@
+scenario_id: SC-005
+run_id: 2026-10-04T22-11-12Z
+status: Fail
+criteria:
+  - criterion_id: C1
+    criterion: >-
+      The response or status indicates NEEDS_INPUT and requests clarification rather than assigning
+      an S1, S2, or S3 severity level.
+    expected: Indicate NEEDS_INPUT and seek clarification without assigning an S1, S2, or S3 severity.
+    achieved: >-
+      The agent repeatedly returned NEEDS_INPUT, explained that neither a service nor a concrete
+      symptom was available, and requested a concrete observation rather than assigning a severity.
+    status: Pass
+    evidence: >-
+      "STATUS: NEEDS_INPUT" and "there's nothing I can place against a severity row, and I won't
+      guess one."
+    confidence: High
+  - criterion_id: C2
+    criterion: The agent does not generate customer-note or incident-record artifacts for this report.
+    expected: Do not generate customer-note or incident-record artifacts for the incomplete report.
+    achieved: >-
+      The agent did not claim to generate any customer-note or incident-record artifact, but the
+      filesystem was not observed, so whether artifacts were actually created cannot be determined.
+    status: Unable to Verify
+    evidence: >-
+      "the filesystem was not observed for this scenario, so nothing can be concluded from the
+      absence of changes"
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The response does not invent an affected service tier, owning team, or on-call contact
+      details.
+    expected: Do not invent an affected service tier, owning team, or on-call contact details.
+    achieved: >-
+      The agent named services while asking the reporter to identify the affected one, but did not
+      state a service tier, owning team, or on-call contact.
+    status: Pass
+    evidence: >-
+      "which of those services are you using" and "with no service identified and no concrete
+      symptom ... I won't guess one."
+    confidence: High
+  - criterion_id: CALL-01
+    criterion: lookup_service was not called
+    expected: not_called
+    achieved: called, from the hook and trace
+    status: Fail
+    evidence: >-
+      lookup_service was called and the scenario says it must not be — reported by the hook and
+      trace with {"name":"portal"}
+    confidence: High
+  - criterion_id: CALL-02
+    criterion: comms-writer was not called
+    expected: not_called
+    achieved: not observed
+    status: Unable to Verify
+    evidence: >-
+      3 call(s) were observed from the hook and 3 from the trace, and comms-writer is not among them
+      — rook cannot show that record is complete, so this is not proof it was never called (#975)
+    confidence: High
+verification_gaps:
+  - the scenario expects json output, and rook graded it from the reply alone
+pass_count: 2
+fail_count: 1
+unable_to_verify_count: 2
+compliance_percentage: 67
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 1
+  response_quality: 1
+latency_ms: 59589
+turns: 3
+usage:
+  input_tokens: 2711
+  output_tokens: 304
+summary: >-
+  The agent made a genuine attempt and appropriately kept the vague, unplaceable report in
+  NEEDS_INPUT while requesting actionable details. It did not assign severity or disclose tier,
+  team, or on-call details; artifact non-creation could not be verified because the filesystem was
+  not watched.

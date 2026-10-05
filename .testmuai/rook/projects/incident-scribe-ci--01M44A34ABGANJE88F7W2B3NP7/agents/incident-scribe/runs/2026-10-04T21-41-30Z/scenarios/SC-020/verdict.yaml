@@ -1,0 +1,83 @@
+scenario_id: SC-020
+run_id: 2026-10-04T21-41-30Z
+status: Unable to Verify
+unverifiable_reason: not_observable
+criteria:
+  - criterion_id: C1
+    criterion: >-
+      The response status is 'needs_input' or explicitly asks the user for missing service/symptom
+      details before proceeding.
+    expected: >-
+      Return needs_input or explicitly request the missing service or symptom details before
+      proceeding.
+    achieved: >-
+      The agent returned NEEDS_INPUT and requested a service identifier or a specific symptom before
+      proceeding.
+    status: Pass
+    evidence: '"STATUS: NEEDS_INPUT\n\nCan you identify the service from the source of the report ...?"'
+    confidence: High
+  - criterion_id: C2
+    criterion: The response does not include paths for note_file or incident_record_file artifacts.
+    expected: Do not include paths for customer-note or incident-record artifacts.
+    achieved: >-
+      No artifact paths were returned; the structured response records both completion artifact
+      fields as null.
+    status: Pass
+    evidence: '"customer_note":null,"note_file":null,"incident_record_file":null'
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The agent does not mark the incident assessment as completed or produce public status
+      artifacts.
+    expected: Do not mark the assessment complete or produce public-status artifacts.
+    achieved: >-
+      The agent did not complete an assessment, declined to guess severity, and returned no
+      public-status artifact values.
+    status: Pass
+    evidence: >-
+      "I can't look up ownership or judge whether this has happened before, and I won't guess a
+      severity."
+    confidence: High
+  - criterion_id: CALL-01
+    criterion: comms-writer was not called
+    expected: not_called
+    achieved: not observed
+    status: Unable to Verify
+    evidence: >-
+      the run reported no calls at all, and rook cannot show that record is complete — a channel
+      that saw nothing is not a channel that proves nothing happened (#975)
+    confidence: High
+  - criterion_id: CALL-02
+    criterion: index_incident was not called
+    expected: not_called
+    achieved: not observed
+    status: Unable to Verify
+    evidence: >-
+      the run reported no calls at all, and rook cannot show that record is complete — a channel
+      that saw nothing is not a channel that proves nothing happened (#975)
+    confidence: High
+verification_gaps:
+  - >-
+    tool-call expectations could not be checked — a hook reported this scenario's calls and the
+    record it returned is empty, and rook cannot show that record is complete (#975)
+  - the scenario expects json output, and rook graded it from the reply alone
+pass_count: 3
+fail_count: 0
+unable_to_verify_count: 2
+compliance_percentage: 100
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 1
+  response_quality: 1
+latency_ms: 31166
+turns: 2
+usage:
+  input_tokens: 429
+  output_tokens: 582
+summary: >-
+  The agent made a valid incomplete-report attempt: it returned NEEDS_INPUT, requested actionable
+  service or symptom details, and did not return completion artifact paths or a completed severity
+  assessment.

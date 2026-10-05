@@ -1,0 +1,8 @@
+{
+  "scenario_id": "SC-007",
+  "attempt": 1,
+  "goal": "The search-indexer service is completely down and failing 100% of indexing jobs across all cluster nodes.",
+  "setup_messages": [],
+  "profile": "local",
+  "invoked": "scripts/local.mjs"
+}

@@ -1,0 +1,8 @@
+{
+  "scenario_id": "SC-015",
+  "attempt": 1,
+  "goal": "Payments-api checkout endpoint returning HTTP 500 error for all customers attempting purchase.",
+  "setup_messages": [],
+  "profile": "local",
+  "invoked": "scripts/local.mjs"
+}

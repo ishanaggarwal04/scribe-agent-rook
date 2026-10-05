@@ -1,0 +1,68 @@
+scenario_id: SC-008
+run_id: 2026-10-04T21-41-30Z
+status: Pass
+criteria:
+  - criterion_id: C1
+    criterion: The agent looks up metadata for checkout-api and identifies it as a Tier 1 service.
+    expected: Look up checkout-api metadata and identify the service as Tier 1.
+    achieved: The agent called lookup_service for checkout-api and stated that the service is tier 1.
+    status: Pass
+    evidence: >-
+      Observed tool calls record `lookup_service` with `{"name":"checkout-api"}`; the response
+      states: "**Service:** checkout-api — **tier 1**".
+    confidence: High
+  - criterion_id: C2
+    criterion: >-
+      The assessment assigns S2 severity, matching the matrix rule for a Tier 1 service degraded for
+      many users.
+    expected: Assign S2 under the matrix rule for a Tier 1 service degraded for many users.
+    achieved: >-
+      The assessment assigns S2 and explicitly cites the applicable Tier-1/Tier-2
+      degradation-for-many-users matrix row.
+    status: Pass
+    evidence: >-
+      "**Severity: S2** — matching the matrix row *\"a tier-1 or tier-2 service is degraded for many
+      users.\"*"
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The assessment explicitly refrains from assigning S1 severity because the service is degraded
+      rather than unavailable and no money or data is lost.
+    expected: >-
+      Explicitly explain that S1 does not apply because this is degradation rather than
+      unavailability and there was no money or data loss.
+    achieved: >-
+      The assessment explicitly rules out S1 based on continued service availability and the absence
+      of money or data loss.
+    status: Pass
+    evidence: >-
+      "(Not S1: the service is not unavailable and no money/data is being lost; 30% of users on a
+      tier-1 service is degradation at scale.)"
+    confidence: High
+  - criterion_id: CALL-01
+    criterion: lookup_service was called
+    expected: called
+    achieved: called, from the hook and trace
+    status: Pass
+    evidence: lookup_service is in the record rook holds for this scenario, reported by the hook and trace
+    confidence: High
+pass_count: 4
+fail_count: 0
+unable_to_verify_count: 0
+compliance_percentage: 100
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 1
+  response_quality: 1
+latency_ms: 44672
+turns: 1
+usage:
+  input_tokens: 2313
+  output_tokens: 1800
+summary: >-
+  The agent completed the incident assessment, verified checkout-api via lookup_service, and
+  correctly classified the reported widespread Tier-1 degradation as S2. It also explicitly
+  explained why the facts did not meet the S1 threshold.
