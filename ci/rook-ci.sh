@@ -55,7 +55,31 @@ preserve_evidence() {
 trap preserve_evidence EXIT
 
 rook --version
-rook login --username "$LT_USERNAME" --access-key "$LT_ACCESS_KEY"
+# rook reports any 401/403 from the identity endpoint as "credentials were refused",
+# which also covers an edge proxy refusing the runner. On failure, say which it was:
+# the API's own 401 is JSON with a request_id; a proxy block is not. Never prints the key.
+explain_login_failure() {
+  local api
+  case "${ROOK_ENV:-prod}" in
+    stage) api=https://stage-rook-api.lambdatestinternal.com/api/v1 ;;
+    *) api=https://rook-api.lambdatest.com/api/v1 ;;
+  esac
+  local body headers code
+  body=$(mktemp); headers=$(mktemp)
+  code=$(curl -s -o "$body" -D "$headers" -w '%{http_code}' \
+    -H "Authorization: Basic $(printf '%s:%s' "$LT_USERNAME" "$LT_ACCESS_KEY" | base64 -w0)" \
+    "$api/me" || true)
+  echo "login diagnosis: GET $api/me -> HTTP $code" >&2
+  grep -iE '^(content-type|server|cf-mitigated|cf-ray):' "$headers" | sed 's/^/  /' >&2 || true
+  if jq -e . "$body" >/dev/null 2>&1; then
+    jq -r '"  api says: \(.error.code // "ok") / \(.error.message // "") (request_id \(.request_id // "none"))"' "$body" >&2
+  else
+    echo "  body is not the API's JSON (first bytes: $(head -c 80 "$body" | tr -d '\n'))" >&2
+  fi
+  echo "  runner egress IP: $(curl -s --max-time 5 https://api.ipify.org || echo unknown)" >&2
+  rm -f "$body" "$headers"
+}
+rook login --username "$LT_USERNAME" --access-key "$LT_ACCESS_KEY" || { explain_login_failure; exit 1; }
 rook project use "$ROOK_PROJECT_ID"
 rook agent use "$ROOK_AGENT_ID"
 rook profile use "$ROOK_PROFILE"
