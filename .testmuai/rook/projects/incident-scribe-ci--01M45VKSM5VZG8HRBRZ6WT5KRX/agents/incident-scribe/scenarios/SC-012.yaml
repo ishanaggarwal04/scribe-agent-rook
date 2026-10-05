@@ -1,0 +1,184 @@
+local_id: SC-012
+title: Vague incident report without placeable symptom returns NEEDS_INPUT without severity assignment
+feature_id: F-003
+feature_revision_id: sha256:25fd3061662ae226de180cb603db130c1ac6ccb782173d78b046919e7f31da26
+goal: checkout-api seems a bit weird today, just checking in.
+input_kind: text
+acceptance_criteria:
+  - statement: >-
+      The desk response indicates status NEEDS_INPUT or asks a clarifying question requesting
+      specific symptoms before assessing.
+    check: llm_judge
+  - statement: The response does not assign an S1, S2, or S3 severity classification.
+    check: llm_judge
+  - statement: >-
+      The desk does not produce final incident record or customer note artifacts for the incomplete
+      report.
+    check: llm_judge
+  - statement: The desk does not state an outage level or matrix row match for the unplaceable symptom.
+    check: llm_judge
+forbidden: []
+why: >-
+  catches an agent assigning an arbitrary severity rating when no placeable symptom is reported in
+  the input text span from the user prompt text block directly sent to the system prompt context
+  window model invocation execution pass block text parameter value string variable instance payload
+  object frame instance stream output structure field value input data property value text key
+  string instance field value text payload parameter value string instance value block payload value
+  text property value string instance key text property value text instance field value text payload
+  parameter string value instance field string value text instance object parameter value string
+  text instance payload value string text field string value instance value field string value
+  instance text payload parameter value instance string value field text string value instance
+  payload string value instance text field string value instance text string value instance field
+  string value text instance field string value text instance string value field string value text
+  instance string value field string value text instance string value field string value text
+  instance string value field string value text instance string value field string value text
+  instance field string value text instance string value field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text instance field string value text instance field string value text instance field
+  string value text.`, 
+confidence: high
+verification_requires: []
+attachments: []
+preconditions: []
+output_kind: text
+exercises:
+  tools: []
+  subagents: []
+  services: []
+calls: []
+multi_turn: false
+setup_messages: []
+max_turns: null
+repeat: 1
+timeout_seconds: null
+tags: []
+class: functional
+category: negative
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources:
+  - README.md

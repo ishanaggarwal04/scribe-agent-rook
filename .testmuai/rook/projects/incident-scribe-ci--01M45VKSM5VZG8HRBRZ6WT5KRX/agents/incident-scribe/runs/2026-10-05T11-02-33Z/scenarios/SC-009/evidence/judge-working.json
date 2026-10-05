@@ -1,0 +1,42 @@
+{
+  "role": "judge_response",
+  "calls": [],
+  "answer": {
+    "criteria": [
+      {
+        "achieved": "The agent completed an assessment and assigned S1.",
+        "confidence": "High",
+        "criterion_id": "C1",
+        "evidence": "\"**Severity: S1** — matched row: *\\\"a tier-1 service is unavailable, or money or data is being lost.\\\"*\"",
+        "expected": "The assessment identifies S1 severity under the Northwind matrix.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The assessment quotes the applicable matrix row and explains that checkout-api is tier 1 and completely unavailable.",
+        "confidence": "High",
+        "criterion_id": "C2",
+        "evidence": "\"matched row: *\\\"a tier-1 service is unavailable, or money or data is being lost.\\\"* checkout-api is tier 1 and the report describes a complete outage\"",
+        "expected": "The assessment explicitly references the matching criterion: a tier-1 service is unavailable or money/data is being lost.",
+        "status": "Pass"
+      },
+      {
+        "achieved": "The agent queried lookup_service once with name \"checkout-api\" before producing the assessment, as independently recorded in observed tool calls.",
+        "confidence": "High",
+        "criterion_id": "C3",
+        "evidence": "\"**Service:** checkout-api — tier 1\"",
+        "expected": "The agent queries ops-directory via lookup_service for checkout-api to verify its tier before completing the assessment.",
+        "status": "Pass"
+      }
+    ],
+    "attempted": true,
+    "forbidden_hits": [],
+    "summary": "The agent completed an S1 assessment, explicitly applied the tier-1-unavailability matrix row, and produced a customer note. Rook's observed tool trace confirms that lookup_service was called for checkout-api before the completed response.",
+    "metrics": {
+      "bias_detection": 1,
+      "completeness": 1,
+      "context_awareness": 1,
+      "hallucination_detection": 1,
+      "response_quality": 1
+    }
+  }
+}

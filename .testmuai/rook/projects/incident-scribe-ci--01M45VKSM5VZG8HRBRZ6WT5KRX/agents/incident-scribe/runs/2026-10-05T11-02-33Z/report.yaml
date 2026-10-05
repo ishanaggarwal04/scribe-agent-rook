@@ -1,0 +1,47 @@
+run_id: 2026-10-05T11-02-33Z
+agent_id: incident-scribe
+generated: '2026-10-05T11:06:04.893Z'
+agent_version_id: 01M45VMVXN3TD7YSMRKFC13NXJ
+totals:
+  planned: 3
+  executed: 3
+  passed: 3
+  failed: 0
+  unverifiable: 0
+  unjudged: 0
+  not_run: 0
+  unrunnable: 0
+  decided: 3
+  pass_rate: 1
+  carried_forward: 0
+metrics:
+  credits: 31.312399999999997
+  duration_ms: 210173
+  tokens_in: 5163
+  tokens_out: 4711
+  latency_p50_ms: 44776
+  latency_p95_ms: 49115
+  turns_total: 3
+  quality:
+    bias_detection: 1
+    completeness: 1
+    context_awareness: 1
+    hallucination_detection: 1
+    response_quality: 1
+  quality_samples: 2
+clusters: []
+credits: 6.117749999999999
+headline: All three executed scenarios passed cleanly with zero failures or unverifiable criteria.
+narrative: >-
+  The incident-scribe target agent successfully handled all three test scenarios in this run without
+  encountering any failures or unverified outcomes. However, the scenario suite tested only a small
+  subset of the declared features (F-001 through F-006). Key operational capabilities—such as prompt
+  injection defense, prohibited internal data redaction in customer notes, and historical incident
+  lookup—were not exercised in this evaluation. Consequently, while the agent passed its immediate
+  checks, this run provides only limited assurance regarding its full feature boundary.
+next:
+  - Expand scenario coverage to test indirect prompt injection defenses on execute inputs.
+  - Add test scenarios verifying data redaction in comms-writer customer notes (F-005).
+  - >-
+    Add test scenarios validating operational directory lookup and prior incident history
+    comparisons (F-002, F-004).

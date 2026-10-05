@@ -1,0 +1,61 @@
+scenario_id: SC-009
+run_id: 2026-10-05T11-02-33Z
+status: Pass
+criteria:
+  - criterion_id: C1
+    criterion: The assessment identifies the incident severity as S1 based on the Northwind severity matrix.
+    expected: The assessment identifies S1 severity under the Northwind matrix.
+    achieved: The agent completed an assessment and assigned S1.
+    status: Pass
+    evidence: >-
+      "**Severity: S1** — matched row: *\"a tier-1 service is unavailable, or money or data is being
+      lost.\"*"
+    confidence: High
+  - criterion_id: C2
+    criterion: >-
+      The assessment explicitly references the matching matrix criteria (tier-1 service unavailable
+      or money/data being lost).
+    expected: >-
+      The assessment explicitly references the matching criterion: a tier-1 service is unavailable
+      or money/data is being lost.
+    achieved: >-
+      The assessment quotes the applicable matrix row and explains that checkout-api is tier 1 and
+      completely unavailable.
+    status: Pass
+    evidence: >-
+      "matched row: *\"a tier-1 service is unavailable, or money or data is being lost.\"*
+      checkout-api is tier 1 and the report describes a complete outage"
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The agent queries ops-directory using lookup_service for checkout-api to verify its tier
+      before completing the assessment.
+    expected: >-
+      The agent queries ops-directory via lookup_service for checkout-api to verify its tier before
+      completing the assessment.
+    achieved: >-
+      The agent queried lookup_service once with name "checkout-api" before producing the
+      assessment, as independently recorded in observed tool calls.
+    status: Pass
+    evidence: '"**Service:** checkout-api — tier 1"'
+    confidence: High
+pass_count: 3
+fail_count: 0
+unable_to_verify_count: 0
+compliance_percentage: 100
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 1
+  response_quality: 1
+latency_ms: 44776
+turns: 1
+usage:
+  input_tokens: 1757
+  output_tokens: 1519
+summary: >-
+  The agent completed an S1 assessment, explicitly applied the tier-1-unavailability matrix row, and
+  produced a customer note. Rook's observed tool trace confirms that lookup_service was called for
+  checkout-api before the completed response.

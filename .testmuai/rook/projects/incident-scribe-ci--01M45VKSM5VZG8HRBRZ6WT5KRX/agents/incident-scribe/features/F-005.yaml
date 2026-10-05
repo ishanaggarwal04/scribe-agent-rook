@@ -1,0 +1,35 @@
+local_id: F-005
+name: Produce a safe customer incident note
+user_story: >-
+  As a customer affected by a reported incident, I submit an incident report through execute, so
+  that the desk returns a concise customer-facing note without exposing internal operational
+  details.
+expected_behaviour: >-
+  After completing an assessment, the desk delegates customer-note generation to the tool-less
+  comms-writer with the assessment, service, tier, owning team, runbook URL, and on-call address. It
+  returns a customer-facing three- or four-sentence note that excludes prohibited internal
+  information.
+edge_cases:
+  - >-
+    The note must not reveal internal runbook URLs, on-call email addresses, internal hostnames, or
+    severity codes.
+  - The delegated writer returns a three- or four-sentence note.
+  - Internal information may also be removed by the desk's sanitizer.
+validation_rules:
+  - The note must not expose internal runbook URLs.
+  - The note must not expose on-call email addresses, internal hostnames, or severity codes.
+  - The note is generated only after a completed assessment.
+calls:
+  - comms-writer
+  - configured LLM provider
+assumptions:
+  - >-
+    The desk has produced a completed assessment and has the verified service facts required by the
+    writer.
+sources:
+  - incident_scribe/agent.py:run_turn
+  - incident_scribe/agent.py:_clean_note
+  - incident_scribe/agent.py:COMMS_SYSTEM
+  - docs/incident-policy.pdf
+confidence: null
+known_data: []

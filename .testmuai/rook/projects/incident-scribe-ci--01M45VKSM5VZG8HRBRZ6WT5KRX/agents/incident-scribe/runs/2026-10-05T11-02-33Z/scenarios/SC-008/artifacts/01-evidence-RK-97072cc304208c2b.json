@@ -1,0 +1,270 @@
+{
+  "what_this_is": "Collected by the rook profile after the conversation, from the desk's own session folder (the folder its SCRIBE_STATE_DIR points at). The artifacts folder was read from disk in full, so artifacts_written is the complete list of artifacts the desk wrote in this session.",
+  "session_id": "RK-97072cc304208c2b",
+  "session_folder": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\88d5d46bed195665\\sessions\\RK-97072cc304208c2b",
+  "artifacts_folder": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\88d5d46bed195665\\sessions\\RK-97072cc304208c2b\\artifacts",
+  "artifacts_written": [
+    "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\88d5d46bed195665\\sessions\\RK-97072cc304208c2b\\artifacts\\incident-record-RK-97072cc304208c2b-001.json",
+    "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\88d5d46bed195665\\sessions\\RK-97072cc304208c2b\\artifacts\\status-note-RK-97072cc304208c2b-001.md"
+  ],
+  "artifact_count": 2,
+  "execute_replies": [
+    {
+      "ok": true,
+      "status": "completed",
+      "answer": "STATUS: COMPLETE\nSEVERITY: S2 — matching the matrix row \"a tier-1 or tier-2 service is degraded for many users.\" checkout-api is a tier-1 service (per lookup), and elevated latency plus sporadic 504s affecting roughly 30% of active users is degradation for many users. S1 does not apply: the service is operational and no transaction data or payments are lost, so neither the \"tier-1 unavailable\" nor the \"money or data being lost\" condition is met.\n\n**Service:** checkout-api\n**Owning team:** payments (on-call: payments-oncall@northwind.example)\n**Runbook:** https://runbooks.internal.northwind/checkout-api\n\n**Has this happened before?** Yes, similar incidents exist on record:\n- **INC-2041** (S1, checkout-api, resolved 2026-07-14) — \"Card authorisation timeouts\": checkout hung on the payment step with shoppers seeing timeouts on charge requests; root cause was a payment-provider endpoint degradation. This is the closest match to the current symptom.\n- **INC-2098** (S2, checkout-api, resolved 2026-08-02) — \"Elevated 5xx on /v2/charge\": intermittent 5xx/errors after a deploy caused by a connection-pool regression. Relevant given the gateway timeout symptoms.\n\nWorth checking both prior root causes when triaging — a recent deploy (per INC-2098) or upstream provider degradation (per INC-2041) are the two patterns that have produced this symptom before.\n\nCustomer note:\n**Checkout — service disruption update**\n\nSome shoppers may notice checkout is slower than usual, with occasional timeouts when completing a purchase — this affects roughly 30% of active users. Checkout itself remains up and running, and no orders, payments, or transaction data have been lost. We're sorry for the inconvenience; engineers are actively investigating the cause. We'll share another update as soon as we know more.",
+      "assessment": "STATUS: COMPLETE\nSEVERITY: S2 — matching the matrix row \"a tier-1 or tier-2 service is degraded for many users.\" checkout-api is a tier-1 service (per lookup), and elevated latency plus sporadic 504s affecting roughly 30% of active users is degradation for many users. S1 does not apply: the service is operational and no transaction data or payments are lost, so neither the \"tier-1 unavailable\" nor the \"money or data being lost\" condition is met.\n\n**Service:** checkout-api\n**Owning team:** payments (on-call: payments-oncall@northwind.example)\n**Runbook:** https://runbooks.internal.northwind/checkout-api\n\n**Has this happened before?** Yes, similar incidents exist on record:\n- **INC-2041** (S1, checkout-api, resolved 2026-07-14) — \"Card authorisation timeouts\": checkout hung on the payment step with shoppers seeing timeouts on charge requests; root cause was a payment-provider endpoint degradation. This is the closest match to the current symptom.\n- **INC-2098** (S2, checkout-api, resolved 2026-08-02) — \"Elevated 5xx on /v2/charge\": intermittent 5xx/errors after a deploy caused by a connection-pool regression. Relevant given the gateway timeout symptoms.\n\nWorth checking both prior root causes when triaging — a recent deploy (per INC-2098) or upstream provider degradation (per INC-2041) are the two patterns that have produced this symptom before.",
+      "customer_note": "**Checkout — service disruption update**\n\nSome shoppers may notice checkout is slower than usual, with occasional timeouts when completing a purchase — this affects roughly 30% of active users. Checkout itself remains up and running, and no orders, payments, or transaction data have been lost. We're sorry for the inconvenience; engineers are actively investigating the cause. We'll share another update as soon as we know more.",
+      "note_file": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\88d5d46bed195665\\sessions\\RK-97072cc304208c2b\\artifacts\\status-note-RK-97072cc304208c2b-001.md",
+      "incident_record_file": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\88d5d46bed195665\\sessions\\RK-97072cc304208c2b\\artifacts\\incident-record-RK-97072cc304208c2b-001.json",
+      "status_board_image": "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
+      "severity_matrix_image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+      "calls": [
+        {
+          "name": "lookup_service",
+          "arguments": {
+            "name": "checkout-api"
+          }
+        },
+        {
+          "name": "search_incidents",
+          "arguments": {
+            "limit": 5,
+            "query": "elevated latency and 504 gateway timeouts"
+          }
+        },
+        {
+          "name": "recent_incidents",
+          "arguments": {
+            "limit": 5,
+            "service": "checkout-api"
+          }
+        },
+        {
+          "name": "comms_writer_subagent",
+          "arguments": {
+            "role": "comms-writer"
+          }
+        }
+      ],
+      "usage": {
+        "input": 1746,
+        "output": 1915
+      },
+      "metrics": {
+        "status": "completed",
+        "latency_ms": 48233,
+        "model_calls": 3,
+        "tool_calls": 3,
+        "input_tokens": 1746,
+        "output_tokens": 1915
+      },
+      "service": "checkout-api",
+      "owning_team": "payments",
+      "tier": 1,
+      "severity": "S2"
+    }
+  ],
+  "tool_calls_with_results": [
+    {
+      "name": "lookup_service",
+      "arguments": {
+        "name": "checkout-api"
+      },
+      "result": {
+        "found": true,
+        "name": "checkout-api",
+        "owning_team": "payments",
+        "tier": 1,
+        "on_call": "payments-oncall@northwind.example",
+        "runbook_url": "https://runbooks.internal.northwind/checkout-api",
+        "status_board": "https://status.northwind.example/boards/checkout-api.png",
+        "status_board_image": "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
+        "severity_matrix_image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+      }
+    },
+    {
+      "name": "search_incidents",
+      "arguments": {
+        "limit": 5,
+        "query": "elevated latency and 504 gateway timeouts"
+      },
+      "result": {
+        "query": "elevated latency and 504 gateway timeouts",
+        "service": "all",
+        "mode": "lexical",
+        "count": 4,
+        "incidents": [
+          {
+            "id": "INC-2041",
+            "service": "checkout-api",
+            "severity": "S1",
+            "summary": "Card authorisation timeouts",
+            "symptoms": "Card payments fail at authorisation; checkout hangs on the payment step; shoppers see timeouts on charge requests",
+            "root_cause": "The payment provider degraded its authorisation endpoint during a certificate rotation, and gateway retries amplified the latency",
+            "resolution": "Provider rolled back the certificate change; authorisation latency recovered within 40 minutes",
+            "resolved": "2026-07-14",
+            "score": 0.966
+          },
+          {
+            "id": "INC-2098",
+            "service": "checkout-api",
+            "severity": "S2",
+            "summary": "Elevated 5xx on /v2/charge",
+            "symptoms": "Intermittent payment failures; 5xx errors on the charge endpoint; error rate spiked right after a deploy",
+            "root_cause": "A deploy shipped a connection-pool regression; the pool exhausted under peak load and requests were refused",
+            "resolution": "Rolled back the deploy; pool sizing fixed in the follow-up release",
+            "resolved": "2026-08-02",
+            "score": 0.322
+          },
+          {
+            "id": "INC-2110",
+            "service": "notify-worker",
+            "severity": "S2",
+            "summary": "Email queue backed up",
+            "symptoms": "Customers not receiving email notifications; delivery queue growing; order confirmations delayed",
+            "root_cause": "Upstream mail provider throttled the account after a template change raised message size",
+            "resolution": "Template assets moved to CDN; queue drained; provider limits raised",
+            "resolved": "2026-08-19",
+            "score": 0
+          },
+          {
+            "id": "INC-1877",
+            "service": "search-indexer",
+            "severity": "S3",
+            "summary": "Index lag over 20 minutes",
+            "symptoms": "Search results stale; indexing queue lagging; newly listed products missing from search",
+            "root_cause": "A burst reindex job starved the indexer worker pool and the queue fell behind",
+            "resolution": "Reindex job re-queued off-peak; lag drained to under a minute",
+            "resolved": "2026-06-28",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "recent_incidents",
+      "arguments": {
+        "limit": 5,
+        "service": "checkout-api"
+      },
+      "result": {
+        "service": "checkout-api",
+        "count": 2,
+        "incidents": [
+          {
+            "id": "INC-2098",
+            "service": "checkout-api",
+            "severity": "S2",
+            "summary": "Elevated 5xx on /v2/charge",
+            "symptoms": "Intermittent payment failures; 5xx errors on the charge endpoint; error rate spiked right after a deploy",
+            "root_cause": "A deploy shipped a connection-pool regression; the pool exhausted under peak load and requests were refused",
+            "resolution": "Rolled back the deploy; pool sizing fixed in the follow-up release",
+            "resolved": "2026-08-02"
+          },
+          {
+            "id": "INC-2041",
+            "service": "checkout-api",
+            "severity": "S1",
+            "summary": "Card authorisation timeouts",
+            "symptoms": "Card payments fail at authorisation; checkout hangs on the payment step; shoppers see timeouts on charge requests",
+            "root_cause": "The payment provider degraded its authorisation endpoint during a certificate rotation, and gateway retries amplified the latency",
+            "resolution": "Provider rolled back the certificate change; authorisation latency recovered within 40 minutes",
+            "resolved": "2026-07-14"
+          }
+        ]
+      }
+    }
+  ],
+  "session_log": [
+    {
+      "ts": "2026-10-05T11:03:34Z",
+      "event": "session_opened"
+    },
+    {
+      "ts": "2026-10-05T11:03:35Z",
+      "event": "task_received",
+      "chars": 199
+    },
+    {
+      "ts": "2026-10-05T11:03:42Z",
+      "event": "tool_call",
+      "tool": "lookup_service",
+      "arguments": {
+        "name": "checkout-api"
+      },
+      "cached": false
+    },
+    {
+      "ts": "2026-10-05T11:03:42Z",
+      "event": "tool_call",
+      "tool": "search_incidents",
+      "arguments": {
+        "limit": 5,
+        "query": "elevated latency and 504 gateway timeouts"
+      },
+      "cached": false
+    },
+    {
+      "ts": "2026-10-05T11:03:42Z",
+      "event": "tool_call",
+      "tool": "recent_incidents",
+      "arguments": {
+        "limit": 5,
+        "service": "checkout-api"
+      },
+      "cached": false
+    },
+    {
+      "ts": "2026-10-05T11:03:58Z",
+      "event": "assessment",
+      "status": "completed",
+      "text": "STATUS: COMPLETE\nSEVERITY: S2 — matching the matrix row \"a tier-1 or tier-2 service is degraded for many users.\" checkout-api is a tier-1 service (per lookup), and elevated latency plus sporadic 504s affecting roughly 30% of active users is degradation for many users. S1 does not apply: the service is operational and no transaction data or payments are lost, so neither the \"tier-1 unavailable\" nor"
+    },
+    {
+      "ts": "2026-10-05T11:03:58Z",
+      "event": "subagent_start",
+      "role": "comms-writer"
+    },
+    {
+      "ts": "2026-10-05T11:04:23Z",
+      "event": "subagent_end",
+      "role": "comms-writer",
+      "chars": 429
+    },
+    {
+      "ts": "2026-10-05T11:04:23Z",
+      "event": "file_written",
+      "path": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\88d5d46bed195665\\sessions\\RK-97072cc304208c2b\\artifacts\\status-note-RK-97072cc304208c2b-001.md"
+    },
+    {
+      "ts": "2026-10-05T11:04:23Z",
+      "event": "file_written",
+      "path": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\88d5d46bed195665\\sessions\\RK-97072cc304208c2b\\artifacts\\incident-record-RK-97072cc304208c2b-001.json"
+    },
+    {
+      "ts": "2026-10-05T11:04:23Z",
+      "event": "turn_metrics",
+      "status": "completed",
+      "latency_ms": 48233,
+      "model_calls": 3,
+      "tool_calls": 3,
+      "input_tokens": 1746,
+      "output_tokens": 1915
+    },
+    {
+      "ts": "2026-10-05T11:04:23Z",
+      "event": "image_attached",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png"
+    },
+    {
+      "ts": "2026-10-05T11:04:23Z",
+      "event": "image_attached",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+    },
+    {
+      "ts": "2026-10-05T11:04:23Z",
+      "event": "task_completed"
+    }
+  ]
+}

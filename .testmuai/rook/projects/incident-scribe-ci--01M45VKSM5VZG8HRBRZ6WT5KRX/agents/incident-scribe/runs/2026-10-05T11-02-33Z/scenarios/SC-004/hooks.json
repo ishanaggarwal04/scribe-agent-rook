@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "phases": {
+    "open": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-05T11:02:35.183Z",
+      "durationMs": 745,
+      "data": {
+        "conversation": "RK-bc60ae971d8a6287"
+      }
+    },
+    "execute": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-05T11:03:11.839Z",
+      "durationMs": 36653,
+      "data": {
+        "attempt": 1,
+        "execution": "c628f23e-81e0-4a82-84f5-38fc2e7b75b6",
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "billing-gateway-v9"
+            },
+            "turn": 1
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "POST requests failing with 500 errors",
+              "service": "billing-gateway-v9"
+            },
+            "turn": 1
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "limit": 5,
+              "service": "billing-gateway-v9"
+            },
+            "turn": 1
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "POST requests failing with 500 errors"
+            },
+            "turn": 1
+          }
+        ],
+        "conversation": "RK-bc60ae971d8a6287"
+      }
+    },
+    "collect": {
+      "ran": true,
+      "ok": true,
+      "at": "2026-10-05T11:03:12.038Z",
+      "durationMs": 184,
+      "data": {
+        "conversation": "RK-bc60ae971d8a6287",
+        "evidence_file": "C:\\Users\\ishanaggarwal\\Downloads\\incident-scribe-agent\\incident-scribe-agent\\.scribe-sessions\\rook\\df5ee3be75a2fd4d\\evidence-RK-bc60ae971d8a6287.json",
+        "artifacts_written": [],
+        "images": [],
+        "calls": [
+          {
+            "name": "lookup_service",
+            "arguments": {
+              "name": "billing-gateway-v9"
+            }
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "POST requests failing with 500 errors",
+              "service": "billing-gateway-v9"
+            }
+          },
+          {
+            "name": "recent_incidents",
+            "arguments": {
+              "limit": 5,
+              "service": "billing-gateway-v9"
+            }
+          },
+          {
+            "name": "search_incidents",
+            "arguments": {
+              "limit": 5,
+              "query": "POST requests failing with 500 errors"
+            }
+          }
+        ],
+        "attempt": 1,
+        "execution": "c628f23e-81e0-4a82-84f5-38fc2e7b75b6"
+      }
+    }
+  },
+  "conversation": "RK-bc60ae971d8a6287"
+}

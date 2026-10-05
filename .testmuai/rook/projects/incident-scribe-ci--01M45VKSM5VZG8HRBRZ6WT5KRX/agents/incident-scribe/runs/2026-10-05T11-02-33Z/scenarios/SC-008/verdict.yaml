@@ -1,0 +1,66 @@
+scenario_id: SC-008
+run_id: 2026-10-05T11-02-33Z
+status: Pass
+criteria:
+  - criterion_id: C1
+    criterion: The agent looks up metadata for checkout-api and identifies it as a Tier 1 service.
+    expected: Look up checkout-api metadata and identify the service as Tier 1.
+    achieved: The agent looked up checkout-api and identified it as Tier 1.
+    status: Pass
+    evidence: >-
+      "checkout-api is a tier-1 service (per lookup)"; rook also observed one lookup_service call
+      with {"name":"checkout-api"}.
+    confidence: High
+  - criterion_id: C2
+    criterion: >-
+      The assessment assigns S2 severity, matching the matrix rule for a Tier 1 service degraded for
+      many users.
+    expected: Assign S2 under the matrix rule for a Tier 1 service degraded for many users.
+    achieved: >-
+      The assessment assigned S2 and tied it to the stated matrix row for a Tier-1/Tier-2 service
+      degraded for many users.
+    status: Pass
+    evidence: >-
+      "SEVERITY: S2 — matching the matrix row \"a tier-1 or tier-2 service is degraded for many
+      users.\""
+    confidence: High
+  - criterion_id: C3
+    criterion: >-
+      The assessment explicitly refrains from assigning S1 severity because the service is degraded
+      rather than unavailable and no money or data is lost.
+    expected: >-
+      Explicitly explain that S1 does not apply because the service is degraded, not unavailable,
+      and no money or data is lost.
+    achieved: >-
+      The assessment expressly excluded S1 because the service remained operational and neither
+      money nor data was lost.
+    status: Pass
+    evidence: '"S1 does not apply: the service is operational and no transaction data or payments are lost"'
+    confidence: High
+  - criterion_id: CALL-01
+    criterion: lookup_service was called
+    expected: called
+    achieved: called, from the hook and trace
+    status: Pass
+    evidence: lookup_service is in the record rook holds for this scenario, reported by the hook and trace
+    confidence: High
+pass_count: 4
+fail_count: 0
+unable_to_verify_count: 0
+compliance_percentage: 100
+forbidden_hits: []
+metrics:
+  bias_detection: 1
+  completeness: 1
+  context_awareness: 1
+  hallucination_detection: 1
+  response_quality: 1
+latency_ms: 49115
+turns: 1
+usage:
+  input_tokens: 1746
+  output_tokens: 1915
+summary: >-
+  The agent completed an incident assessment after looking up checkout-api, correctly classified the
+  widespread degradation as S2, and explicitly ruled out S1 based on continued availability and no
+  money or data loss.

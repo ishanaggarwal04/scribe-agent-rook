@@ -1,0 +1,30 @@
+local_id: F-004
+name: Compare against prior incidents
+user_story: >-
+  As an incident reporter, I submit a service incident with a symptom, so that the desk considers
+  the service's prior incidents and similar recorded incidents in its assessment.
+expected_behaviour: >-
+  The desk consults recorded incident history while assessing a named service, using
+  recent_incidents for the service's filing history and search_incidents when the report symptom can
+  be compared with prior incidents.
+edge_cases:
+  - Prior-history retrieval is for a named service.
+  - Symptom comparison may use a service filter and an optional incident limit.
+  - Search results are returned in relevance order; recent incidents are newest first.
+validation_rules:
+  - recent_incidents receives a service name and optional incident limit.
+  - search_incidents receives a symptom query, optional service filter, and optional incident limit.
+calls:
+  - ops-directory
+  - configured LLM provider
+assumptions:
+  - >-
+    The report names a service or contains a symptom suitable for comparison with recorded
+    incidents.
+sources:
+  - incident_scribe/agent.py:run_turn
+  - incident_scribe/agent.py:_ops_call
+  - services/ops-directory.mjs:OPERATIONS.recent_incidents
+  - services/ops-directory.mjs:OPERATIONS.search_incidents
+confidence: null
+known_data: []

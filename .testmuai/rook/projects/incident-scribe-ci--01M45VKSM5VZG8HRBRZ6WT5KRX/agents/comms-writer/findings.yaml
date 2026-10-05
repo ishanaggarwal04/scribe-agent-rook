@@ -1,0 +1,10 @@
+- severity: medium
+  what: >-
+    The customer-boundary rules rely primarily on the model prompt, and the post-generation cleaner
+    does not remove team names, internal jargon, or arbitrary internal hostnames outside its
+    .internal pattern.
+  where: 'incident_scribe/agent.py: COMMS_SYSTEM and _clean_note'
+  why: >-
+    A note can still expose internal routing information even though the authoritative policy
+    prohibits internal hostnames and the subagent is instructed not to include team names.
+  id: FI-001

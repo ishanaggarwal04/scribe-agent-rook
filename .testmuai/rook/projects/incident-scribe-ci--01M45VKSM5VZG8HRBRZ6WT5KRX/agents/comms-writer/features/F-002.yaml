@@ -1,0 +1,46 @@
+local_id: F-002
+name: Remove internal operational details from the customer note
+user_story: >-
+  As a customer, I want the status note generated from a structured incident facts object to omit
+  runbook links, on-call contact details, internal URLs, internal hostnames, severity codes, and
+  internal routing information, so that the public message does not expose operational details.
+expected_behaviour: >-
+  Keep internal routing and operational details out of the customer note, including runbook links,
+  internal URLs, on-call email addresses, and severity codes. Post-generation cleaning removes known
+  runbook/on-call values, HTTP(S) URLs, .internal hostnames, and S1-S3 codes, but does not reliably
+  remove team names, internal jargon, or arbitrary internal hostnames outside the .internal pattern.
+edge_cases:
+  - The supplied runbook URL and on-call email must not be disclosed.
+  - URLs present in generated text are replaced with '[detail removed]' by the cleaner.
+  - Hostnames matching the .internal pattern are replaced with '[detail removed]'.
+  - >-
+    The documented analysis notes that arbitrary internal hostnames outside the narrow .internal
+    pattern may remain.
+validation_rules:
+  - Do not include an internal URL, runbook link, or on-call email address.
+  - Do not include severity codes.
+  - Do not include team names or internal jargon.
+  - >-
+    Generated HTTP(S) URLs and known internal values are replaced with '[detail removed]' by the
+    cleaner.
+assumptions:
+  - >-
+    The input may contain internal fields because incident-scribe deliberately passes them to the
+    subagent.
+  - >-
+    The cleaner's hostname rule is the only mechanically enforced hostname filter described in the
+    source.
+sources:
+  - 'incident_scribe/agent.py: COMMS_SYSTEM'
+  - 'incident_scribe/agent.py: _clean_note'
+  - 'README.md: The subagent'
+  - 'README.md: The rules it must follow'
+  - 'WHAT ANALYSE ALREADY THINKS IS WRONG WITH IT: customer-boundary enforcement'
+known_data:
+  - '[detail removed]'
+  - S1
+  - S2
+  - S3
+  - .internal
+calls: []
+confidence: null
