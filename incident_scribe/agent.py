@@ -169,7 +169,7 @@ def _reported_severity(text: str) -> str | None:
 
 
 def _policy_severity(tier: int | None, text: str) -> str | None:
-    """Return a row only when the report contains an unambiguous policy cue."""
+    """Return a matrix row only when the report contains an unambiguous policy cue."""
     lower = text.lower()
     if tier == 3 or re.search(r"limited impact|single[- ]user", lower):
         return "S3"
