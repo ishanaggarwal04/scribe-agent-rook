@@ -15,8 +15,10 @@ jobs:
     timeout-minutes: 60
     environment: rook-assurance
     env:
-      # Which Rook servers the public CLI talks to: stage unless the ROOK_ENV variable says prod.
-      ROOK_ENV: ${{ vars.ROOK_ENV || 'stage' }}
+      # Which Rook servers the public CLI talks to: prod unless the ROOK_ENV variable says stage.
+      # Stage only accepts the LambdaTest VPN, so GitHub-hosted runners get a Cloudflare 403
+      # there; set ROOK_ENV=stage only once CI has stage access or runs on a VPN runner.
+      ROOK_ENV: ${{ vars.ROOK_ENV || 'prod' }}
       ROOK_PROJECT_ID: ${{ vars.ROOK_PROJECT_ID }}
       ROOK_AGENT_ID: ${{ vars.ROOK_AGENT_ID }}
       ROOK_PROFILE: ${{ vars.ROOK_PROFILE }}
