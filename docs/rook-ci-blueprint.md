@@ -1,152 +1,98 @@
 # Rook assurance workflow
 
-A GitHub Actions workflow that tests an AI agent with **Rook** (TestMu AI Agent Assurance) on every
-relevant pull request, every night, and on demand. Copy it into your repo to use Rook as the
-assurance layer in your CI/CD.
+This GitHub Actions workflow tests an AI agent with **Rook** before changes go in. It runs the
+agent against saved test scenarios, and the check fails if any scenario doesn't pass.
 
-It assumes you already have a working Rook suite for your agent: a committed `.testmuai/rook/`
-folder with a profile and reviewed scenarios. Setting that up is covered by the
-[Rook docs](https://www.testmuai.com/support/docs/agent-assurance-ci-cd/).
+You need a Rook suite for your agent first: a `.testmuai/rook/` folder with a profile and
+scenarios ([Rook docs](https://www.testmuai.com/support/docs/agent-assurance-ci-cd/)).
 
----
+## When it runs
 
-## How it works
+- **On a pull request** into `main` that changes the agent. It runs only the scenarios related to
+  what changed.
+- **Every weekday night**, and **manually** from the Actions tab. These run all of your chosen
+  scenarios.
+
+## What it does
 
 ```
-trigger: PR into main │ nightly (weekdays 02:30 UTC) │ manual
-        │
-        ▼
-1. Select scenarios ── PR:            only the scenarios whose feature the diff touches
-        │              nightly/manual: the whole gate list (ROOK_SCENARIO_IDS)
-        │              nothing selected → stop here, check passes, no credits spent
-        ▼
-2. Install the Rook CLI (pinned version)
-        ▼
-3. ci/rook-ci.sh
-     rook login         access key from secrets (headless)
-     rook project/agent/profile use
-     rook env set       agent's secret, from a GitHub secret
-     rook sync          the committed suite
-     rook run --only <selected IDs> --json
-     rook report        then check every verdict: any Fail or Unable to Verify → job fails
-        ▼
-4. Upload rook-results/ (run.json, report.json, evidence) as an artifact, even on failure
+1. Pick scenarios      based on what the PR changed (or all of them)
+2. Install Rook
+3. Run the tests       sign in → run the agent through each scenario → Rook grades it
+4. Pass or fail        any failed scenario fails the check
+5. Save the evidence   uploaded as a build artifact, and shown on the Rook dashboard
 ```
 
-The agent itself runs **on the CI runner**, from the PR's code. Rook calls it through your
-profile, simulates the user, and judges every scenario. The run also appears on the Rook
-dashboard as `github-pr<N>-…` (PRs) or `github-…` (other runs).
+The agent runs on the GitHub runner, using the code from the pull request.
 
-**Safety:** only PRs from branches in the same repo run the check. A fork PR's code would run with
-your secrets, so it is skipped. The workflow never uses `pull_request_target`.
-
----
-
-## Files
-
-| File | Role |
-|---|---|
-| `.github/workflows/rook-assurance.yml` | Triggers, runtime setup, wiring |
-| `ci/select-scenarios.mjs` | Picks the scenarios a PR's diff affects |
-| `ci/scenario-map.json` | Extra code → feature mapping for the selector |
-| `ci/rook-ci.sh` | The gate: sign in, sync, run, check verdicts |
-
----
+PRs from forks are skipped, so outside code never runs with your secrets.
 
 ## Use it in your repo
 
-**1. Copy the four files**, then change:
+1. **Copy these files:**
+   - `.github/workflows/rook-assurance.yml`
+   - `ci/rook-ci.sh`
+   - `ci/select-scenarios.mjs`
+   - `ci/scenario-map.json`
 
-- **`rook-assurance.yml`:**
-  - `paths:`: the folders that hold your agent and its tools (keep `.testmuai/rook/**`, `ci/**`
-    and the workflow file itself);
-  - the **runtime setup** steps your agent needs (this repo: Python 3.12 + Node 22);
-  - the `env:` block of *Run the reviewed suite*: your agent's secrets and model settings.
-- **`rook-ci.sh`:** the agent secret's name (`SCRIBE_API_TOKEN` here) in the `: "${…:?}"` check
-  and the `printf` line.
-- **`scenario-map.json`:** your own code. See [How PRs pick scenarios](#how-prs-pick-scenarios).
-  `{}` also works, but then every code change runs the whole gate list.
+2. **Edit them for your agent:**
+   - In the workflow, set `paths:` to your agent's folders. Replace the Python/Node setup steps
+     with whatever your agent needs. List your agent's secrets under *Run the reviewed suite*.
+   - In `ci/rook-ci.sh`, replace `SCRIBE_API_TOKEN` with your agent's secret name.
+   - In `ci/scenario-map.json`, map your own code (see below), or set it to `{}` to start.
 
-**2. In GitHub, create an environment** under *Settings → Environments*, named `rook-assurance`.
-Leave *Deployment branches* on **No restriction**. Optionally, add required reviewers to approve
-each run before it spends credits.
+3. **In GitHub**, go to *Settings → Environments* and create **`rook-assurance`**. Then add:
+   - Secrets:
+     - `LT_USERNAME` and `LT_ACCESS_KEY` (your Rook / LambdaTest account);
+     - your agent's own secrets.
+   - Variables:
+     - `ROOK_PROJECT_ID`;
+     - `ROOK_AGENT_ID` (the agent's folder name);
+     - `ROOK_PROFILE` (e.g. `local`);
+     - `ROOK_SCENARIO_IDS`: the scenarios to test, like `SC-004,SC-008,SC-009`.
 
-**3. Add these to that environment:**
+4. **Run it** from *Actions → Rook assurance → Run workflow*, or open a pull request. A pass ends
+   with `Rook release gate passed.`
 
-| Secrets | |
-|---|---|
-| `LT_USERNAME`, `LT_ACCESS_KEY` | Rook account (LambdaTest console → *Account Settings → Password & Security*) |
-| your agent's secrets | e.g. its API token and model key |
+Only list scenarios in `ROOK_SCENARIO_IDS` that pass reliably. One failure fails the check.
 
-| Variables | |
-|---|---|
-| `ROOK_PROJECT_ID` | your Rook project ID |
-| `ROOK_AGENT_ID` | the agent's folder name under `.testmuai/rook/projects/*/agents/` |
-| `ROOK_PROFILE` | the profile name (e.g. `local`) |
-| `ROOK_SCENARIO_IDS` | the **gate list**: reliable scenarios, comma-separated, no spaces |
-| your agent's config | e.g. model provider and name |
-| `ROOK_ENV` *(optional)* | `prod` (default) or `stage` (stage only works inside the LambdaTest VPN) |
+## How it picks scenarios for a PR
 
-**4. Run it.** Use *Actions → Rook assurance → Run workflow*, or open a PR that changes the agent.
-A pass ends with `Rook release gate passed.`, and the job's **Summary** shows which scenarios
-were picked and why.
+Each Rook scenario belongs to a feature, and each feature lists the code it uses. The workflow
+looks at which functions the PR changed and runs the scenarios for those features.
 
-> Put only scenarios that pass reliably in `ROOK_SCENARIO_IDS`. The gate is strict: one
-> *Unable to Verify* fails the job.
+- If a change can't be matched to a feature, it runs **all** scenarios, to be safe.
+- If nothing relevant changed (docs, comments), it runs **nothing**, and the check passes.
 
----
-
-## How PRs pick scenarios
-
-1. The diff is turned into the **functions and constants** it changes. Comments and blank lines are
-   ignored.
-2. Those are matched to **features**:
-   - through Rook's mapping (each `features/F-*.yaml` lists its `sources`);
-   - plus `ci/scenario-map.json`.
-3. The PR runs the gated scenarios of those features. A changed scenario file runs that scenario.
-4. **Fail-safe:** anything changed that nothing maps runs the **whole gate list**.
+`ci/scenario-map.json` fills in what Rook's mapping misses:
 
 ```json
 {
-  "ignore":        { "paths": ["docs/**"], "symbols": ["src/agent.py:debug_dump"] },
-  "full_run_on":   { "sources": ["src/agent.py:SYSTEM_PROMPT", "src/llm.py"] },
+  "ignore":        { "paths": ["docs/**"] },
+  "full_run_on":   { "sources": ["src/agent.py:SYSTEM_PROMPT"] },
   "extra_sources": { "F-003": ["src/agent.py:severity_helper"] }
 }
 ```
 
-- **`ignore`:** code your tested turns never reach.
-- **`full_run_on`:** shared code every answer depends on: the prompt, the main loop, the model
-  client.
-- **`extra_sources`:** code that drives a feature but is missing from Rook's `sources`.
+- **`ignore`:** files that never affect the agent.
+- **`full_run_on`:** code everything depends on, such as the prompt. Changing it runs all scenarios.
+- **`extra_sources`:** code that belongs to a feature but that Rook didn't list.
 
-Selection only picks from the gate list. Put a reliable scenario for each feature in it, or changes
-to the other features aren't tested on PRs. The nightly full run covers what per-PR selection can
-miss.
+## Blocking merges (optional)
 
----
+By default the check only **reports** ✅ or ❌, and a PR can still be merged. This demo repo keeps
+it that way.
 
-## Advisory check or merge gate
+To **block** merging until the check passes:
 
-By default the check is **advisory**: a PR shows ✅ or ❌, but it can still be merged. That's how
-this demo repo uses it.
+1. Remove `paths:` from the workflow's `pull_request` trigger.
+2. Add your docs to `ignore` in `ci/scenario-map.json`.
+3. In *Settings → Branches*, require the **`assurance`** check on `main`.
 
-To make it a **merge gate**, so that `main` only ever holds versions that passed:
+## If something goes wrong
 
-1. Remove `paths:` from the `pull_request` trigger. A required check on a PR that doesn't match the
-   filter never runs, and the PR stays stuck on "waiting for status".
-2. Add your docs and other non-agent files to `ignore.paths` in `ci/scenario-map.json`, so those PRs
-   pass in seconds without running Rook.
-3. Go to *Settings → Branches* → a rule for `main` → **Require status checks** → `assurance`.
-
----
-
-## Troubleshooting
-
-| You see | Fix |
-|---|---|
-| `those credentials were refused`, diagnosis **401 JSON** | Wrong username or access key for that environment |
-| `those credentials were refused`, diagnosis **403 HTML (cloudflare)** | The runner's network is blocked (stage is VPN-only). Use prod or a self-hosted runner |
-| `No files were found … rook-results/` | The gate failed earlier. Read the *Run the reviewed suite* log |
-| Scenarios `agent_never_ran` | Your profile failed on Linux (timeouts, `EPIPE`). Check the profile's script |
-| No Rook check on a PR | Fork PR (skipped by design), or no changed file matched `paths` |
-| PR check "waiting" | The environment has required reviewers. Approve the run |
+- **"credentials were refused":** check `LT_USERNAME` and `LT_ACCESS_KEY`. The log's
+  *login diagnosis* line tells you whether the key was wrong (401) or the network was blocked (403).
+- **No check on a PR:** the PR came from a fork, or it didn't change any file listed in `paths:`.
+- **Scenario says "agent never ran":** the agent failed to start on the runner. Check your setup
+  steps and your profile's script.
