@@ -1,0 +1,30 @@
+local_id: F-004
+name: Index a completed incident when its session closes
+user_story: >-
+  As an operator, I close a session that contains a completed incident assessment, so that
+  incident-scribe indexes the service, severity, summary, and symptoms in ops-directory and retains
+  the session artifacts.
+expected_behaviour: >-
+  On closing a session with a completed incident record, the agent calls ops-directory's
+  index_incident operation and persists the resulting session state, artifacts, and event
+  information.
+edge_cases:
+  - Indexing occurs only when the closed session has a completed incident record.
+  - The indexed record contains the session's service, severity, summary, and symptoms.
+validation_rules:
+  - >-
+    index_incident receives the completed session's service, severity, summary, symptoms, and
+    session id.
+  - The close-time indexing call is made only for a completed incident record.
+calls:
+  - ops-directory
+  - .scribe-sessions/<session-id>
+assumptions:
+  - A completed assessment has already been produced in the session.
+  - The caller explicitly closes the session.
+sources:
+  - incident_scribe/__main__.py:_index_latest_record
+  - services/ops-directory.mjs:OPERATIONS.index_incident
+  - incident_scribe/__main__.py:Session
+confidence: null
+known_data: []

@@ -1,0 +1,62 @@
+local_id: SC-005
+title: Index completed incident record in ops-directory when session closes
+feature_id: F-004
+feature_revision_id: sha256:1d13191a82e2dc0bb1dcf2325a558e1490b26edcf7d0f7814dab407c5049c0ee
+goal: >-
+  checkout-api latency spikes to 4500ms after database deployment, impacting 25% of checkout
+  requests. Severity S2 assigned.
+input_kind: text
+acceptance_criteria:
+  - statement: >-
+      The ops-directory service index_incident tool is invoked upon closing the session with
+      completed status.
+    check: mcp_probe
+  - statement: The index_incident payload includes service, severity, summary, symptoms, and session_id.
+    check: llm_judge
+  - statement: The agent returns completion status for the incident record.
+    check: regex
+    params:
+      pattern: completed
+forbidden: []
+why: >-
+  Catches failure to call index_incident when a valid completed session is closed, ensuring incident
+  history is persisted.
+confidence: high
+verification_requires:
+  - type: mcp
+    server: ops-directory
+attachments: []
+preconditions:
+  - >-
+    SCRIBE_API_TOKEN is valid and session S-1 is open for processing an incident on service
+    checkout-api.
+output_kind: json
+exercises:
+  tools:
+    - lookup_service
+    - index_incident
+  subagents: []
+  services:
+    - checkout-api
+calls:
+  - tool: lookup_service
+    expect: called
+  - tool: index_incident
+    expect: called
+multi_turn: false
+setup_messages: []
+max_turns: null
+timeout_seconds: null
+tags:
+  - integration
+  - indexing
+  - session_close
+  - F-004
+class: functional
+category: integration
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources: []

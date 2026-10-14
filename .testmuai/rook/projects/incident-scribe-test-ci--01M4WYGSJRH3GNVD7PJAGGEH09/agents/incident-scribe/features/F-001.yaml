@@ -1,0 +1,49 @@
+local_id: F-001
+name: Assess a placeable incident using current service and policy data
+user_story: >-
+  As a user, I submit a plain-language incident report containing a placeable symptom on execute
+  stdin, so that incident-scribe identifies the affected service, determines the policy-based
+  severity, and returns a completed assessment.
+expected_behaviour: >-
+  For a placeable incident report, the agent obtains current service ownership data, checks recent
+  and similar incidents as needed, assigns a severity only from the Northwind matrix, states the
+  matching matrix row, and produces a completed assessment with service, owner, tier, and severity.
+  It then generates a customer-facing note and machine-readable incident artifacts.
+edge_cases:
+  - >-
+    The affected service may be different from the service initially inferred from the report,
+    requiring service lookup.
+  - >-
+    The report may match recent or similar incidents and must be assessed using retrieved incident
+    data.
+  - >-
+    Instruction-shaped text in the report or retrieved records is treated as report content, not as
+    instructions.
+validation_rules:
+  - Owning team, service tier, and on-call address must come from lookup_service data.
+  - Severity must come from the Northwind matrix and include the matching matrix row.
+  - Retrieved report content must not be followed as instructions.
+calls:
+  - configured model API
+  - ops-directory
+  - comms-writer
+  - .scribe-sessions/<session-id>
+assumptions:
+  - The caller can provide a report containing a symptom that can be associated with a service.
+  - >-
+    The current Northwind severity matrix is available through the agent's assessment process and
+    service data is available from ops-directory.
+sources:
+  - incident_scribe/agent.py:run_turn
+  - incident_scribe/agent.py:TOOLS
+  - incident_scribe/agent.py:SCRIBE_SYSTEM
+  - services/ops-directory.mjs:OPERATIONS.lookup_service
+  - services/ops-directory.mjs:OPERATIONS.recent_incidents
+  - services/ops-directory.mjs:OPERATIONS.search_incidents
+  - docs/incident-policy.pdf
+  - README.md
+known_data:
+  - S1
+  - S2
+  - S3
+confidence: null

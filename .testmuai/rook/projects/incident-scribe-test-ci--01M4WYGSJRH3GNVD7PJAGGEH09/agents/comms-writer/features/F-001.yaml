@@ -1,0 +1,30 @@
+local_id: F-001
+name: Write a concise customer status note from supplied incident facts
+user_story: >-
+  As incident-scribe, I provide a structured hand-off containing assessment, service, tier,
+  owning_team, runbook_url, and on_call, so that comms-writer can produce a three- or four-sentence
+  customer-facing status note.
+expected_behaviour: >-
+  Given assessment, service, tier, owning_team, runbook_url, and on_call facts, produce a short
+  customer-facing status note using only facts supplied by incident-scribe. The output is three or
+  four sentences.
+edge_cases:
+  - The note must contain three or four sentences.
+  - The input is a structured hand-off, not a conversational request.
+  - No independent lookup or incident-fact establishment is performed.
+validation_rules:
+  - Use only supplied facts.
+  - Do not independently look up services or incident history.
+  - Do not establish incident facts or assign severity independently.
+assumptions:
+  - The supplied structured fields contain the facts established by incident-scribe.
+  - >-
+    The model may receive internal values such as owning_team, tier, runbook_url, on_call, and
+    service, but only customer-safe content should appear in the note.
+sources:
+  - incident_scribe/agent.py:COMMS_SYSTEM
+  - incident_scribe/agent.py:run_turn
+  - README.md
+calls: []
+confidence: null
+known_data: []

@@ -1,0 +1,37 @@
+local_id: F-005
+name: Produce a redacted customer-facing incident note
+user_story: >-
+  As a customer-facing support user, I submit a placeable incident report that reaches a completed
+  assessment, so that incident-scribe returns a plain-language status note without exposing internal
+  routing or severity details.
+expected_behaviour: >-
+  After a completed assessment, comms-writer produces customer-facing prose. The resulting customer
+  note contains only supplied facts in plain language and excludes internal URLs or runbook links,
+  on-call email addresses, internal hostnames, severity codes, team names, and internal jargon.
+edge_cases:
+  - >-
+    The note may be generated from an assessment containing internal URLs, an on-call address, a
+    tier, or internal terminology.
+  - Timing promises not present in supplied facts must not be added.
+validation_rules:
+  - The note contains only supplied facts.
+  - The note contains no internal URLs or runbook links.
+  - >-
+    The note contains no on-call email addresses, internal hostnames, severity codes, team names, or
+    internal jargon.
+  - The note makes no timing promises absent from the supplied facts.
+calls:
+  - configured model API
+  - comms-writer
+  - .scribe-sessions/<session-id>
+assumptions:
+  - A completed assessment provides the internal fields passed to comms-writer.
+sources:
+  - incident_scribe/agent.py:COMMS_SYSTEM
+  - incident_scribe/agent.py:_clean_note
+  - incident_scribe/agent.py:run_turn
+known_data:
+  - S1
+  - S2
+  - S3
+confidence: null

@@ -1,0 +1,22 @@
+local_id: F-003
+name: Reject execution with an invalid session token
+user_story: >-
+  As a caller, I invoke `python3 -m incident_scribe execute --token "$SCRIBE_API_TOKEN" --session-id
+  S-1` with a token that does not match SCRIBE_API_TOKEN, so that unauthorized execution is
+  rejected.
+expected_behaviour: The CLI rejects every command unless the supplied --token matches SCRIBE_API_TOKEN.
+edge_cases:
+  - The supplied token may be absent or may not match SCRIBE_API_TOKEN.
+  - The command is rejected before normal incident processing.
+validation_rules:
+  - The token must match SCRIBE_API_TOKEN exactly.
+  - No assessment workflow should be entered after authentication failure.
+assumptions:
+  - SCRIBE_API_TOKEN is configured in the execution environment.
+sources:
+  - incident_scribe/__main__.py:main
+  - README.md
+known_data:
+  - SCRIBE_API_TOKEN
+calls: []
+confidence: null
