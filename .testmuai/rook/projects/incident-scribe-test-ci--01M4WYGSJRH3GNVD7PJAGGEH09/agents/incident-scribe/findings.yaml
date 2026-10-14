@@ -1,0 +1,49 @@
+- severity: high
+  what: >-
+    A later execute can reuse the prior session's service record instead of fetching ownership,
+    tier, and on-call data during the current task.
+  where: incident_scribe/agent.py:run_turn, prior_state/service_record handling
+  why: >-
+    This conflicts with the README and policy requirement that attribution come from lookup_service
+    during every task, allowing stale ownership or tier claims without a current lookup.
+  id: FI-001
+- severity: high
+  what: >-
+    The report-injection defense is primarily an instruction to the model plus a logging regex; the
+    suspected report is still passed to the model as ordinary prompt content and is not isolated or
+    rejected.
+  where: incident_scribe/__main__.py:main and incident_scribe/agent.py:SCRIBE_SYSTEM/looks_like_injection
+  why: >-
+    A malicious incident report or retrieved incident can still influence tool selection or
+    assessment if the model follows embedded instructions, despite the stated rule that report text
+    is data.
+  id: FI-002
+- severity: high
+  what: >-
+    Customer-note sanitization removes known URLs, the fetched on-call address, some .internal
+    hostnames, and S1-S3 markers, but does not enforce the broader no-team-name/no-internal-jargon
+    rule or remove arbitrary internal email addresses, tiers, or hostnames.
+  where: incident_scribe/agent.py:COMMS_SYSTEM and _clean_note
+  why: >-
+    The subagent is explicitly handed internal fields, so a generated note can still expose internal
+    routing information that the prompt says must not reach customers.
+  id: FI-003
+- severity: medium
+  what: >-
+    The deterministic severity cross-check uses unnegated keyword searches and returns S3 for every
+    tier-3 service before checking the policy's money-or-data-loss S1 condition.
+  where: incident_scribe/agent.py:_policy_severity
+  why: >-
+    Reports saying that money is not being lost can be treated as S1, and a tier-3 incident
+    involving actual money or data loss can be rejected rather than evaluated consistently with the
+    authoritative matrix.
+  id: FI-004
+- severity: medium
+  what: >-
+    When the required SEVERITY marker is absent, _reported_severity falls back to the first S1-S3
+    token anywhere in the assessment text.
+  where: incident_scribe/agent.py:_reported_severity and run_turn
+  why: >-
+    A severity code quoted from retrieved incident history or a comparison can be mistaken for the
+    desk's assigned severity, allowing an assessment to pass with the wrong row.
+  id: FI-005

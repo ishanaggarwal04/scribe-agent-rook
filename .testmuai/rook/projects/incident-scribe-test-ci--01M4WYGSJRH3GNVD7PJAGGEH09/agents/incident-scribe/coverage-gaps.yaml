@@ -1,0 +1,12 @@
+- feature_id: F-001
+  pattern_id: confused-deputy-untrusted-record
+  reason: no scenario generated; applicability remains unverified
+- feature_id: F-001
+  pattern_id: cross-session-memory-poisoning
+  reason: no scenario generated; applicability remains unverified
+- feature_id: F-001
+  pattern_id: delegated-message-spoofing
+  reason: no scenario generated; applicability remains unverified
+- feature_id: F-001
+  pattern_id: tool-description-poisoning
+  reason: no scenario generated; applicability remains unverified

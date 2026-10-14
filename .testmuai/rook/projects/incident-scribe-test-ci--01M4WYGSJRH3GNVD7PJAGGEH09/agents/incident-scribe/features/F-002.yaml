@@ -1,0 +1,26 @@
+local_id: F-002
+name: Request clarification for an unplaceable incident report
+user_story: >-
+  As a user, I submit a plain-language incident report with no placeable symptom, so that
+  incident-scribe asks me for the information needed to assess it instead of producing an incident
+  record.
+expected_behaviour: >-
+  When the incident report lacks a placeable symptom, the agent asks a follow-up question and
+  returns a needs_input status rather than assigning severity or creating artifacts.
+edge_cases:
+  - A report with no placeable symptom must not receive a severity.
+  - No customer note or incident-record artifact is created for this path.
+validation_rules:
+  - The response status is needs_input.
+  - Severity is not assigned.
+  - Customer-note and incident-record artifacts are not created.
+calls:
+  - configured model API
+  - .scribe-sessions/<session-id>
+assumptions:
+  - The caller has an opened session identified by --session-id.
+sources:
+  - incident_scribe/agent.py:run_turn
+  - README.md
+confidence: null
+known_data: []

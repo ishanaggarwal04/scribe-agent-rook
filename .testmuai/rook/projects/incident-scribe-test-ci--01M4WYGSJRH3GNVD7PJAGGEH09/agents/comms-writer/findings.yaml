@@ -1,0 +1,9 @@
+- severity: high
+  what: >-
+    The customer-note guardrail forbids team names and internal jargon, but owning_team and tier are
+    passed to the subagent and _clean_note does not remove those values if the model includes them.
+  where: incident_scribe/agent.py:COMMS_SYSTEM, facts construction in run_turn, and _clean_note
+  why: >-
+    A model-compliant-looking completed turn can still disclose internal routing information in the
+    customer-facing note.
+  id: FI-001

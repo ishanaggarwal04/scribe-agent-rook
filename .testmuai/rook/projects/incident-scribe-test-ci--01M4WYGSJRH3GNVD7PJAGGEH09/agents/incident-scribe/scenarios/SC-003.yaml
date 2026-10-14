@@ -1,0 +1,56 @@
+local_id: SC-003
+title: Negated money-loss report on checkout-api assigns S3 severity
+feature_id: F-001
+feature_revision_id: sha256:c2ddb726adb04f344c887cc6106aa04eb1374e803d0a580ef0afae9a2b85e26f
+goal: >-
+  checkout-api is experiencing elevated latency for a single internal test user; no money or data is
+  being lost.
+input_kind: text
+acceptance_criteria:
+  - statement: The agent calls lookup_service to retrieve facts for checkout-api.
+    check: llm_judge
+  - statement: >-
+      The assessment assigns severity S3 based on single-user impact and absence of money or data
+      loss.
+    check: llm_judge
+  - statement: The response does not classify the incident as severity S1.
+    check: regex
+    params:
+      pattern: ^((?!\bS1\b)[\s\S])*$
+forbidden:
+  - S1
+why: >-
+  catches naive keyword matching in policy cross-checks that misclassifies negated money-loss text
+  as S1 instead of S3
+confidence: high
+verification_requires: []
+attachments: []
+preconditions: []
+output_kind: text
+exercises:
+  tools:
+    - lookup_service
+  subagents: []
+  services:
+    - checkout-api
+calls:
+  - tool: lookup_service
+    expect: called
+multi_turn: false
+setup_messages: []
+max_turns: null
+timeout_seconds: null
+tags:
+  - boundary
+  - severity
+  - negation
+  - checkout-api
+class: functional
+category: boundary
+redteam: null
+executable: true
+skip_reason: null
+excluded: false
+origin: generated
+sources:
+  - README.md

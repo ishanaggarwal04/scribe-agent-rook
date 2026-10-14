@@ -1,0 +1,35 @@
+local_id: F-002
+name: Keep internal routing and infrastructure details out of the customer note
+user_story: >-
+  As incident-scribe, I provide a structured hand-off that may include internal service-routing
+  details, so that comms-writer returns a customer note without exposing team names, internal
+  jargon, severity codes, runbook links, on-call addresses, or internal hostnames.
+expected_behaviour: >-
+  Write the note in plain language and exclude internal jargon, team names, severity codes, internal
+  URLs or runbook links, on-call email addresses, and internal hostnames.
+edge_cases:
+  - The input may contain a team name in owning_team.
+  - The input may contain internal jargon or a severity code in tier.
+  - The input may contain a runbook URL, on-call email address, or internal hostname.
+  - >-
+    The model can be instructed not to disclose these values even though the existing sanitizer does
+    not reliably enforce all of those restrictions.
+validation_rules:
+  - Exclude team names.
+  - Exclude internal jargon and severity codes.
+  - Never include an internal URL or runbook link.
+  - Never include an on-call email address.
+  - Never include an internal hostname.
+  - Use plain language.
+assumptions:
+  - >-
+    The customer note is checked for disclosures after generation, although the supplied material
+    indicates that _clean_note may not remove every prohibited value.
+sources:
+  - incident_scribe/agent.py:COMMS_SYSTEM
+  - incident_scribe/agent.py:run_turn
+  - incident_scribe/agent.py:_clean_note
+  - docs/incident-policy.pdf
+calls: []
+confidence: null
+known_data: []

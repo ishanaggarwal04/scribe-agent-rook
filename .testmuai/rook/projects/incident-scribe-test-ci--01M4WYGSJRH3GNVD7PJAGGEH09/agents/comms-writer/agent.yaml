@@ -1,0 +1,60 @@
+local_id: comms-writer
+name: comms-writer
+parent: incident-scribe
+declared:
+  description: >-
+    A tool-less customer communications subagent that turns facts established by incident-scribe
+    into a short customer-facing status note.
+  name: comms-writer
+source:
+  kind: codebase
+  tracks:
+    - README.md
+    - docs/incident-policy.pdf
+    - incident_scribe/__main__.py
+    - incident_scribe/agent.py
+    - incident_scribe/agent.py:COMMS_SYSTEM
+    - incident_scribe/agent.py:run_turn
+    - incident_scribe/llm.py
+    - incident_scribe/mcp.py
+    - services/ops-directory.mjs
+  subtree_digest: dbf8990b6ba3d3cc6d34475c1b2f5c64f7f22d4d4052debe39514039de27889f
+framework:
+  evidence: >-
+    incident_scribe/agent.py directly invokes the local llm.call adapter and defines the subagent
+    prompt; no agent framework SDK or graph is used.
+  name: custom
+interface:
+  accepts:
+    - assessment
+    - service
+    - tier
+    - owning_team
+    - runbook_url
+    - on_call
+  entry: >-
+    incident_scribe/agent.py: run_turn -> llm.call([llm.system(COMMS_SYSTEM), llm.user(facts_json)],
+    max_output_tokens=1500)
+  intake: structured
+  out_of_scope:
+    - Looking up services or incident history
+    - Calling tools or MCP servers
+    - Establishing incident facts or assigning severity independently
+  produces: A three- or four-sentence customer-facing status note
+  transport: subagent
+limits: {}
+guardrails:
+  - Use only facts supplied by incident-scribe; do not look up or invent information.
+  - Write in plain language and exclude internal jargon, team names, and severity codes.
+  - >-
+    Never include an internal URL, runbook link, on-call email address, or internal hostname in the
+    customer note.
+  - Do not write an apology longer than one clause.
+  - Do not make timing promises that were not supplied.
+assumptions:
+  - >-
+    The exact model provider and model name are inherited from the parent process's llm.call
+    configuration and are not declared by comms-writer itself.
+default_subagent: null
+calls: []
+approval_gates: []

@@ -1,0 +1,27 @@
+local_id: F-003
+name: Avoid unsupported promises and excessive apologies
+user_story: >-
+  As incident-scribe, I provide only the established incident facts in a structured hand-off, so
+  that comms-writer communicates the situation without inventing details, adding unsupported timing
+  promises, or writing a lengthy apology.
+expected_behaviour: >-
+  Do not invent information or make timing promises that were not supplied. If the note contains an
+  apology, keep it to no more than one clause.
+edge_cases:
+  - The facts may contain no timing estimate.
+  - The facts may contain a timing estimate that can be stated without adding a promise.
+  - The note may include an apology, but it must not exceed one clause.
+  - The model may be tempted to add reassuring or speculative timing language.
+validation_rules:
+  - Use only facts supplied by incident-scribe.
+  - Do not make timing promises absent from the supplied facts.
+  - Do not write an apology longer than one clause.
+assumptions:
+  - An apology, if included, is optional rather than required.
+  - Timing information is considered supplied only when present in the hand-off facts.
+sources:
+  - incident_scribe/agent.py:COMMS_SYSTEM
+  - incident_scribe/agent.py:run_turn
+calls: []
+confidence: null
+known_data: []

@@ -1,0 +1,46 @@
+id: local
+name: local
+kind: cli
+target:
+  auth: token via SCRIBE_API_TOKEN
+  command: python3 -m incident_scribe
+hooks:
+  prepare: null
+  open:
+    script: scripts/local.mjs
+    mode: cli
+    target:
+      auth: token via SCRIBE_API_TOKEN
+      command: python3 -m incident_scribe open
+    timeout_seconds: 120
+    delay_seconds: 0
+  execute:
+    script: scripts/local.mjs
+    mode: cli
+    target:
+      auth: token via SCRIBE_API_TOKEN
+      command: python3 -m incident_scribe execute
+    timeout_seconds: 600
+    delay_seconds: 0
+  close:
+    script: scripts/local.mjs
+    mode: cli
+    target:
+      auth: token via SCRIBE_API_TOKEN
+      command: python3 -m incident_scribe close
+    timeout_seconds: 120
+    delay_seconds: 0
+  collect:
+    script: scripts/local.mjs
+    mode: cli
+    target:
+      auth: token via SCRIBE_API_TOKEN
+      command: python3 -m incident_scribe logs
+    timeout_seconds: 600
+    delay_seconds: 0
+env:
+  - variable: SCRIBE_API_TOKEN
+capabilities:
+  multi_turn: true
+  calls: true
+  usage: true
